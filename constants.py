@@ -2,8 +2,9 @@ import socket
 from datetime import datetime, timezone
 
 # Network Configuration
-HOST = 'localhost'
-PORT = 5000
+HOST = '0.0.0.0'  # Listen on all available network interfaces
+DEFAULT_PORT = 5000  # Default port to try first
+PORT_RANGE = range(5000, 5010)  # Range of ports to try if default is in use
 BUFFER_SIZE = 4096
 
 # Admin Configuration
