@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Logs and databases
+*.log
+server.log
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.env
+.venv
+
+# IDE and platform specific files
+.vscode/
+.DS_Store
+.project
+.pydevproject

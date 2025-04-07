@@ -1,6 +1,8 @@
 import socket
 import threading
 import json
+import argparse
+import os
 from typing import Optional
 from datetime import datetime
 from constants import (
@@ -12,8 +14,10 @@ from constants import (
 from message import Message, MessageValidator
 
 class ChatClient:
-    def __init__(self):
+    def __init__(self, server_host=HOST):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_host = server_host
+        self.server_port = PORT
         self.username: Optional[str] = None
         self.current_channel = 'general'
         self.running = False
@@ -22,7 +26,8 @@ class ChatClient:
     def start(self):
         """Start the client and connect to the server."""
         try:
-            self.socket.connect((HOST, PORT))
+            print(f"{Colors.CYAN}Connecting to server at {self.server_host}:{self.server_port}...{Colors.END}")
+            self.socket.connect((self.server_host, self.server_port))
             self.running = True
 
             # Get username
@@ -150,6 +155,21 @@ class ChatClient:
         self.socket.close()
         print(f"\n{Colors.YELLOW}Disconnected from server.{Colors.END}")
 
-if __name__ == "__main__":
-    client = ChatClient()
-    client.start()
+def main():
+    parser = argparse.ArgumentParser(description='Chat Client')
+    parser.add_argument('--server', '-s', default=HOST,
+                      help='Server IP address (default: localhost)')
+    args = parser.parse_args()
+
+    client = ChatClient(server_host=args.server)
+    try:
+        client.start()
+    except KeyboardInterrupt:
+        print(f"\n{Colors.YELLOW}Disconnecting from server...{Colors.END}")
+    except Exception as e:
+        print(f"{Colors.RED}Error: {e}{Colors.END}")
+    finally:
+        client.cleanup()
+
+if __name__ == '__main__':
+    main()

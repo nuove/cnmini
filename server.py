@@ -2,6 +2,9 @@ import socket
 import threading
 import json
 import logging
+import signal
+import sys
+import os
 from datetime import datetime
 from typing import Dict, Set
 from constants import (
@@ -22,37 +25,98 @@ logging.basicConfig(
     ]
 )
 
+def get_local_ip():
+    """Get the local IP address of the machine."""
+    try:
+        # Create a socket to get local IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # Doesn't actually connect, just gets local IP
+        s.connect(('8.8.8.8', 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
+    except Exception:
+        return '127.0.0.1'  # Fallback to localhost if can't determine IP
+
 class ChatServer:
     def __init__(self):
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.server_socket = None
         self.clients: Dict[str, socket.socket] = {}  # username -> socket
         self.channels: Dict[str, Set[str]] = {}  # channel -> set of usernames
         self.banned_users: Set[str] = set()  # Set of banned usernames
-        self.admin_users: Set[str] = {DEFAULT_ADMIN}  # Set of admin usernames
+        self.admin_users: Set[str] = {DEFAULT_ADMIN}  # Set of admin users
         self.lock = threading.Lock()
         self.kicked_users: Set[str] = set()  # Set of kicked usernames
+        self.running = True
+        self.local_ip = get_local_ip()
         logging.info(f"Server initialized with default admin: {DEFAULT_ADMIN}")
+
+    def initialize_socket(self):
+        """Initialize the server socket."""
+        try:
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_socket.bind((HOST, PORT))
+            self.server_socket.listen(5)
+            logging.info(f"Server started on {self.local_ip}:{PORT}")
+        except Exception as e:
+            logging.error(f"Failed to initialize server socket: {e}")
+            sys.exit(1)
+
+    def cleanup(self):
+        """Clean up server resources."""
+        self.running = False
+        logging.info("Cleaning up server resources...")
+        
+        # Close all client connections
+        for client_socket in self.clients.values():
+            try:
+                client_socket.close()
+            except:
+                pass
+        
+        # Close server socket
+        if self.server_socket:
+            try:
+                self.server_socket.close()
+            except:
+                pass
+        
+        self.clients.clear()
+        self.channels.clear()
+        logging.info("Server cleanup completed")
 
     def start(self):
         """Start the server and listen for connections."""
         try:
-            self.server_socket.bind((HOST, PORT))
-            self.server_socket.listen(5)
-            logging.info(f"Server started on {HOST}:{PORT}")
-            print(f"{Colors.GREEN}Server started on {HOST}:{PORT}{Colors.END}")
-            print(f"{Colors.YELLOW}Default admin account: {DEFAULT_ADMIN}{Colors.END}")
-            print(f"{Colors.CYAN}Logging to server.log{Colors.END}\n")
+            self.initialize_socket()
+            
+            # Print server information in a clear, organized way
+            print(f"\n{Colors.GREEN}Server Information:{Colors.END}")
+            print(f"{Colors.GREEN}IP Address: {self.local_ip}{Colors.END}")
+            print(f"{Colors.GREEN}Port: {PORT}{Colors.END}")
+            print(f"{Colors.YELLOW}Default Admin: {DEFAULT_ADMIN}{Colors.END}")
+            print(f"{Colors.CYAN}Logging to: server.log{Colors.END}")
+            print(f"\n{Colors.YELLOW}Press Ctrl+C to stop the server{Colors.END}")
 
-            while True:
-                client_socket, address = self.server_socket.accept()
-                logging.info(f"New connection from {address}")
-                print(f"{Colors.CYAN}New connection from {address}{Colors.END}")
-                threading.Thread(target=self.handle_client, args=(client_socket,)).start()
+            while self.running:
+                try:
+                    client_socket, address = self.server_socket.accept()
+                    logging.info(f"New connection from {address}")
+                    print(f"{Colors.CYAN}New connection from {address}{Colors.END}")
+                    threading.Thread(target=self.handle_client, args=(client_socket,)).start()
+                except socket.timeout:
+                    # This is expected due to the socket timeout
+                    continue
+                except Exception as e:
+                    logging.error(f"Error accepting connection: {e}")
+                    break
 
         except Exception as e:
             logging.error(f"Server error: {e}")
             print(f"{Colors.RED}Server error: {e}{Colors.END}")
+        finally:
+            self.cleanup()
 
     def handle_client(self, client_socket: socket.socket):
         """Handle a new client connection."""
@@ -373,6 +437,22 @@ class ChatServer:
         """Handle exit command."""
         self.handle_client_disconnect(username)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     server = ChatServer()
-    server.start() 
+    
+    def signal_handler(sig, frame):
+        print(f"\n{Colors.YELLOW}Shutting down server...{Colors.END}")
+        server.cleanup()
+        sys.exit(0)
+    
+    # Register signal handlers for graceful shutdown
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
+    try:
+        server.start()
+    except Exception as e:
+        logging.error(f"Server error: {e}")
+        print(f"{Colors.RED}Server error: {e}{Colors.END}")
+    finally:
+        server.cleanup() 

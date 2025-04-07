@@ -27,10 +27,19 @@ pip install -r requirements.txt
 python server.py
 ```
 
-2. Start one or more clients in separate terminals:
-```bash
-python client.py
-```
+2. Start one or more clients:
+   - On the same machine:
+   ```bash
+   python client.py
+   ```
+   - From a different device on the same network:
+   ```bash
+   python client.py --server <server-ip-address>
+   ```
+   Replace `<server-ip-address>` with the IP address of the machine running the server.
+   You can find the server's IP address using:
+   - On Linux/Mac: `ifconfig` or `ip addr`
+   - On Windows: `ipconfig`
 
 3. When prompted, enter a username that follows these rules:
    - Length: 3-20 characters
