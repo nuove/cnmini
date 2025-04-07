@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 from typing import Dict, Set
 from constants import (
-    HOST, DEFAULT_PORT, PORT_RANGE, BUFFER_SIZE, DEFAULT_ADMIN,
+    HOST, PORT, BUFFER_SIZE, DEFAULT_ADMIN,
     CMD_JOIN, CMD_EXIT, CMD_KICK, CMD_BAN,
     CMD_MAKEADMIN, CMD_REMOVEADMIN, CMD_LISTADMINS,
     CMD_HELP, ADMIN_COMMANDS, Colors
@@ -24,9 +24,6 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-
-# File to store the active port
-PORT_FILE = 'active_port.txt'
 
 def get_local_ip():
     """Get the local IP address of the machine."""
@@ -51,56 +48,25 @@ class ChatServer:
         self.lock = threading.Lock()
         self.kicked_users: Set[str] = set()  # Set of kicked usernames
         self.running = True
-        self.active_port = None
         self.local_ip = get_local_ip()
         logging.info(f"Server initialized with default admin: {DEFAULT_ADMIN}")
 
     def initialize_socket(self):
-        """Initialize the server socket with proper cleanup."""
-        if self.server_socket:
-            self.server_socket.close()
-        
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Enable port reuse
-        self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        # Set a timeout for the socket
-        self.server_socket.settimeout(1.0)
-
-    def find_available_port(self):
-        """Find an available port from the port range."""
-        for port in PORT_RANGE:
-            try:
-                # Try to bind to the port
-                self.server_socket.bind((HOST, port))
-                self.active_port = port
-                logging.info(f"Found available port: {port}")
-                return port
-            except OSError:
-                continue
-        
-        raise OSError("No available ports in the specified range")
-
-    def save_active_port(self):
-        """Save the active port to a file for clients to discover."""
+        """Initialize the server socket."""
         try:
-            with open(PORT_FILE, 'w') as f:
-                f.write(str(self.active_port))
-            logging.info(f"Saved active port {self.active_port} to {PORT_FILE}")
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_socket.bind((HOST, PORT))
+            self.server_socket.listen(5)
+            logging.info(f"Server started on {self.local_ip}:{PORT}")
         except Exception as e:
-            logging.error(f"Error saving active port: {e}")
+            logging.error(f"Failed to initialize server socket: {e}")
+            sys.exit(1)
 
     def cleanup(self):
         """Clean up server resources."""
         self.running = False
         logging.info("Cleaning up server resources...")
-        
-        # Remove the port file
-        try:
-            if os.path.exists(PORT_FILE):
-                os.remove(PORT_FILE)
-                logging.info(f"Removed {PORT_FILE}")
-        except Exception as e:
-            logging.error(f"Error removing port file: {e}")
         
         # Close all client connections
         for client_socket in self.clients.values():
@@ -124,16 +90,11 @@ class ChatServer:
         """Start the server and listen for connections."""
         try:
             self.initialize_socket()
-            port = self.find_available_port()
-            self.server_socket.listen(5)
-            self.save_active_port()
-            
-            logging.info(f"Server started on {HOST}:{port}")
             
             # Print server information in a clear, organized way
             print(f"\n{Colors.GREEN}Server Information:{Colors.END}")
             print(f"{Colors.GREEN}IP Address: {self.local_ip}{Colors.END}")
-            print(f"{Colors.GREEN}Port: {port}{Colors.END}")
+            print(f"{Colors.GREEN}Port: {PORT}{Colors.END}")
             print(f"{Colors.YELLOW}Default Admin: {DEFAULT_ADMIN}{Colors.END}")
             print(f"{Colors.CYAN}Logging to: server.log{Colors.END}")
             print(f"\n{Colors.YELLOW}Press Ctrl+C to stop the server{Colors.END}")

@@ -6,41 +6,22 @@ import os
 from typing import Optional
 from datetime import datetime
 from constants import (
-    HOST, DEFAULT_PORT, PORT_RANGE, BUFFER_SIZE, Colors,
+    HOST, PORT, BUFFER_SIZE, Colors,
     CMD_JOIN, CMD_EXIT, CMD_KICK, CMD_BAN,
     CMD_MAKEADMIN, CMD_REMOVEADMIN, CMD_LISTADMINS,
     CMD_HELP
 )
 from message import Message, MessageValidator
 
-# File to read the active port
-PORT_FILE = 'active_port.txt'
-
 class ChatClient:
     def __init__(self, server_host=HOST):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_host = server_host
-        self.server_port = self.discover_server_port()
+        self.server_port = PORT
         self.username: Optional[str] = None
         self.current_channel = 'general'
         self.running = False
         self.is_admin = False
-
-    def discover_server_port(self):
-        """Discover the server's port from the port file or try the default port."""
-        # First try to read from the port file
-        if os.path.exists(PORT_FILE):
-            try:
-                with open(PORT_FILE, 'r') as f:
-                    port = int(f.read().strip())
-                print(f"{Colors.CYAN}Found server port {port} from {PORT_FILE}{Colors.END}")
-                return port
-            except Exception as e:
-                print(f"{Colors.YELLOW}Error reading port file: {e}{Colors.END}")
-        
-        # If port file doesn't exist or has an error, try the default port
-        print(f"{Colors.YELLOW}Using default port {DEFAULT_PORT}{Colors.END}")
-        return DEFAULT_PORT
 
     def start(self):
         """Start the client and connect to the server."""
