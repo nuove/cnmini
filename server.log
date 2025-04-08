@@ -146,3 +146,42 @@
 2025-04-07 09:11:40,238 - INFO - Server cleanup completed
 2025-04-07 09:11:40,238 - INFO - Cleaning up server resources...
 2025-04-07 09:11:40,238 - INFO - Server cleanup completed
+2025-04-07 11:49:44,034 - INFO - Server initialized with default admin: admin
+2025-04-07 11:49:44,034 - INFO - Server started on 10.1.2.170:1738
+2025-04-07 11:50:01,398 - INFO - New connection from ('10.1.2.89', 49539)
+2025-04-07 11:50:04,769 - INFO - User agniv connected successfully
+2025-04-07 11:50:12,351 - INFO - User agniv joined channel gooning
+2025-04-07 11:50:20,064 - INFO - Message from agniv in gooning: i cant gooooon
+2025-04-07 11:52:55,089 - INFO - New connection from ('10.1.1.190', 50492)
+2025-04-07 11:52:58,700 - INFO - User notblankz connected successfully
+2025-04-07 11:53:04,457 - INFO - New connection from ('10.1.2.89', 49543)
+2025-04-07 11:53:05,594 - INFO - Message from notblankz in general: hallo
+2025-04-07 11:53:06,252 - INFO - User akshat connected successfully
+2025-04-07 11:53:10,930 - INFO - Message from akshat in general: i cant goon
+2025-04-07 11:53:14,419 - INFO - Message from notblankz in general: woahhhhh
+2025-04-07 11:53:18,496 - INFO - Message from akshat in general: agniv hop on
+2025-04-07 11:53:18,588 - INFO - Message from notblankz in general: crazy hogya
+2025-04-07 11:53:32,277 - INFO - User notblankz requested help
+2025-04-07 11:53:39,567 - INFO - User notblankz joined channel test
+2025-04-07 11:53:43,037 - INFO - New connection from ('10.1.2.89', 49544)
+2025-04-07 11:53:44,631 - INFO - User admin connected successfully
+2025-04-07 11:53:44,632 - INFO - Admin user admin connected
+2025-04-07 11:53:44,684 - INFO - Message from notblankz in test: hello test
+2025-04-07 11:53:48,671 - INFO - User notblankz joined channel general
+2025-04-07 11:53:48,956 - INFO - User admin requested help
+2025-04-07 11:53:57,761 - INFO - User notblankz promoted to admin by admin
+2025-04-07 11:53:57,762 - INFO - Admin admin promoted notblankz to admin
+2025-04-07 11:54:01,161 - INFO - User notblankz requested help
+2025-04-07 11:54:05,852 - INFO - Admin list requested by notblankz
+2025-04-07 11:54:05,852 - INFO - Admin notblankz requested admin list
+2025-04-07 11:54:16,231 - INFO - Admin notblankz demoted admin from admin
+2025-04-07 11:54:24,553 - INFO - Admin list requested by notblankz
+2025-04-07 11:54:24,554 - INFO - Admin notblankz requested admin list
+2025-04-07 11:54:46,244 - INFO - New connection from ('10.1.2.89', 49545)
+2025-04-07 11:54:49,241 - INFO - User hedge connected successfully
+2025-04-07 11:54:54,704 - INFO - Message from hedge in general: hsp lafda
+2025-04-07 11:55:32,219 - INFO - Message from notblankz in general: crazy hoga
+2025-04-07 11:55:58,334 - ERROR - Error handling message from notblankz: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-04-07 11:56:50,989 - ERROR - Error handling message from akshat: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-04-07 11:59:40,316 - INFO - Server initialized with default admin: admin
+2025-04-07 11:59:40,316 - INFO - Server started on 10.1.2.170:1738

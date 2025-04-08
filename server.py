@@ -108,9 +108,11 @@ class ChatServer:
                 except socket.timeout:
                     # This is expected due to the socket timeout
                     continue
+                
                 except Exception as e:
                     logging.error(f"Error accepting connection: {e}")
                     break
+        
 
         except Exception as e:
             logging.error(f"Server error: {e}")
