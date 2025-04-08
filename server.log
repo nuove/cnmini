@@ -146,6 +146,7 @@
 2025-04-07 09:11:40,238 - INFO - Server cleanup completed
 2025-04-07 09:11:40,238 - INFO - Cleaning up server resources...
 2025-04-07 09:11:40,238 - INFO - Server cleanup completed
+<<<<<<< HEAD
 2025-04-07 11:49:44,034 - INFO - Server initialized with default admin: admin
 2025-04-07 11:49:44,034 - INFO - Server started on 10.1.2.170:1738
 2025-04-07 11:50:01,398 - INFO - New connection from ('10.1.2.89', 49539)
@@ -185,3 +186,178 @@
 2025-04-07 11:56:50,989 - ERROR - Error handling message from akshat: [WinError 10054] An existing connection was forcibly closed by the remote host
 2025-04-07 11:59:40,316 - INFO - Server initialized with default admin: admin
 2025-04-07 11:59:40,316 - INFO - Server started on 10.1.2.170:1738
+=======
+2025-04-08 09:44:57,618 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 09:44:57,618 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 09:45:12,861 - INFO - [MainThread] - New connection from ('10.14.142.202', 50912)
+2025-04-08 09:45:12,861 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.14.142.202', 50912)
+2025-04-08 09:46:18,155 - INFO - [MainThread] - New connection from ('10.14.142.202', 51136)
+2025-04-08 09:46:21,194 - INFO - [Thread-2 (handle_client)] - User nigger connected successfully from ('10.14.142.202', 51136)
+2025-04-08 09:46:29,566 - INFO - [Thread-2 (handle_client)] - Command from nigger: /join shot
+2025-04-08 09:46:29,567 - INFO - [Thread-2 (handle_client)] - User nigger joined channel shot
+2025-04-08 09:46:43,103 - INFO - [Thread-2 (handle_client)] - Message from nigger in shot: gwg
+2025-04-08 09:46:45,125 - INFO - [Thread-2 (handle_client)] - Message from nigger in shot: er
+2025-04-08 09:46:51,313 - INFO - [Thread-2 (handle_client)] - User nigger disconnected
+2025-04-08 09:46:51,314 - INFO - [Thread-2 (handle_client)] - User nigger disconnected and removed from all channels
+2025-04-08 09:46:52,528 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 09:46:52,528 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 09:46:52,528 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 09:46:52,528 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 09:46:52,528 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 09:46:52,528 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 09:56:35,382 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 09:56:35,382 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 09:56:38,500 - INFO - [MainThread] - New connection from ('10.14.142.202', 51204)
+2025-04-08 09:56:40,820 - INFO - [Thread-1 (handle_client)] - User ffff connected successfully from ('10.14.142.202', 51204)
+2025-04-08 09:56:47,959 - INFO - [Thread-1 (handle_client)] - Command from ffff: /join d
+2025-04-08 09:56:47,959 - INFO - [Thread-1 (handle_client)] - User ffff joined channel d
+2025-04-08 09:57:00,258 - INFO - [Thread-1 (handle_client)] - Command from ffff: /help
+2025-04-08 09:57:00,258 - INFO - [Thread-1 (handle_client)] - User ffff requested help
+2025-04-08 10:00:26,028 - INFO - [Thread-1 (handle_client)] - User ffff disconnected
+2025-04-08 10:00:27,355 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:00:27,356 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:00:27,356 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:00:27,356 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:00:27,357 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:00:27,357 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:00:29,276 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:00:29,277 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:00:37,416 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:00:37,416 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 10:00:39,505 - INFO - [MainThread] - New connection from ('10.14.142.202', 51279)
+2025-04-08 10:00:42,221 - INFO - [Thread-1 (handle_client)] - User lmao connected successfully from ('10.14.142.202', 51279)
+2025-04-08 10:00:49,580 - INFO - [Thread-1 (handle_client)] - Command from lmao: /join freaky
+2025-04-08 10:00:49,580 - INFO - [Thread-1 (handle_client)] - User lmao joined channel freaky
+2025-04-08 10:00:53,343 - INFO - [Thread-1 (handle_client)] - Message from lmao in freaky: eheh
+2025-04-08 10:01:00,155 - INFO - [MainThread] - New connection from ('10.14.142.202', 51283)
+2025-04-08 10:01:02,353 - INFO - [Thread-2 (handle_client)] - User fag connected successfully from ('10.14.142.202', 51283)
+2025-04-08 10:01:06,075 - INFO - [Thread-2 (handle_client)] - Command from fag: /join freaky
+2025-04-08 10:01:06,075 - INFO - [Thread-2 (handle_client)] - User fag joined channel freaky
+2025-04-08 10:01:09,794 - INFO - [Thread-1 (handle_client)] - Message from lmao in freaky: heyy
+2025-04-08 10:01:12,160 - INFO - [Thread-2 (handle_client)] - Message from fag in freaky: hellp
+2025-04-08 10:01:13,814 - INFO - [Thread-1 (handle_client)] - Message from lmao in freaky: wgw
+2025-04-08 10:01:15,217 - INFO - [Thread-2 (handle_client)] - Message from fag in freaky: wgwr
+2025-04-08 10:01:29,290 - INFO - [MainThread] - New connection from ('10.14.142.202', 51285)
+2025-04-08 10:01:30,678 - INFO - [Thread-3 (handle_client)] - User admin connected successfully from ('10.14.142.202', 51285)
+2025-04-08 10:01:30,678 - INFO - [Thread-3 (handle_client)] - Admin user admin connected
+2025-04-08 10:01:35,224 - INFO - [Thread-3 (handle_client)] - Command from admin: /help
+2025-04-08 10:01:35,224 - INFO - [Thread-3 (handle_client)] - User admin requested help
+2025-04-08 10:01:45,345 - INFO - [Thread-3 (handle_client)] - Command from admin: /join freaky
+2025-04-08 10:01:45,345 - INFO - [Thread-3 (handle_client)] - User admin joined channel freaky
+2025-04-08 10:01:49,153 - INFO - [Thread-1 (handle_client)] - Command from lmao: /help
+2025-04-08 10:01:49,153 - INFO - [Thread-1 (handle_client)] - User lmao requested help
+2025-04-08 10:02:00,751 - INFO - [Thread-3 (handle_client)] - Command from admin: /kick lmao
+2025-04-08 10:02:00,752 - ERROR - [Thread-1 (handle_client)] - Error handling message from lmao: [Errno 9] Bad file descriptor
+2025-04-08 10:02:00,752 - INFO - [Thread-1 (handle_client)] - User lmao disconnected and removed from all channels
+2025-04-08 10:02:00,753 - ERROR - [Thread-3 (handle_client)] - Error handling message from admin: 'lmao'
+2025-04-08 10:02:18,036 - INFO - [Thread-2 (handle_client)] - User fag disconnected
+2025-04-08 10:02:20,724 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:02:20,725 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:02:20,725 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:02:20,725 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:02:20,726 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:02:20,726 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:02:25,675 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:02:25,676 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:04:32,967 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:04:32,967 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 10:04:39,468 - INFO - [MainThread] - New connection from ('10.14.142.202', 51325)
+2025-04-08 10:04:41,965 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:04:41,965 - ERROR - [MainThread] - Failed to initialize server socket: [Errno 48] Address already in use
+2025-04-08 10:04:41,965 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:04:41,965 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:04:47,089 - INFO - [MainThread] - New connection from ('10.14.142.202', 51330)
+2025-04-08 10:04:55,484 - INFO - [Thread-1 (handle_client)] - User lol connected successfully from ('10.14.142.202', 51325)
+2025-04-08 10:04:58,098 - INFO - [Thread-2 (handle_client)] - User lmao connected successfully from ('10.14.142.202', 51330)
+2025-04-08 10:05:07,094 - INFO - [Thread-1 (handle_client)] - Command from lol: /join deez
+2025-04-08 10:05:07,094 - INFO - [Thread-1 (handle_client)] - User lol joined channel deez
+2025-04-08 10:05:13,337 - INFO - [Thread-2 (handle_client)] - Command from lmao: /join deez
+2025-04-08 10:05:13,338 - INFO - [Thread-2 (handle_client)] - User lmao joined channel deez
+2025-04-08 10:05:15,621 - INFO - [Thread-1 (handle_client)] - Message from lol in deez: frfr
+2025-04-08 10:05:17,198 - INFO - [Thread-2 (handle_client)] - Message from lmao in deez: uhuh
+2025-04-08 10:05:20,103 - INFO - [Thread-1 (handle_client)] - Command from lol: /help
+2025-04-08 10:05:20,103 - INFO - [Thread-1 (handle_client)] - User lol requested help
+2025-04-08 10:05:25,305 - INFO - [Thread-2 (handle_client)] - Command from lmao: /help
+2025-04-08 10:05:25,305 - INFO - [Thread-2 (handle_client)] - User lmao requested help
+2025-04-08 10:05:31,156 - INFO - [MainThread] - New connection from ('10.14.142.202', 51331)
+2025-04-08 10:05:33,193 - INFO - [Thread-3 (handle_client)] - User admin connected successfully from ('10.14.142.202', 51331)
+2025-04-08 10:05:33,193 - INFO - [Thread-3 (handle_client)] - Admin user admin connected
+2025-04-08 10:05:34,750 - INFO - [Thread-3 (handle_client)] - Command from admin: /help
+2025-04-08 10:05:34,750 - INFO - [Thread-3 (handle_client)] - User admin requested help
+2025-04-08 10:05:42,231 - INFO - [Thread-3 (handle_client)] - Command from admin: /kick lmao
+2025-04-08 10:05:42,232 - ERROR - [Thread-2 (handle_client)] - Error handling message from lmao: [Errno 9] Bad file descriptor
+2025-04-08 10:05:42,232 - INFO - [Thread-3 (handle_client)] - User lmao kicked by admin admin
+2025-04-08 10:05:42,232 - INFO - [Thread-3 (handle_client)] - Admin admin kicked user lmao
+2025-04-08 10:05:50,695 - INFO - [Thread-3 (handle_client)] - User admin disconnected
+2025-04-08 10:06:03,953 - INFO - [Thread-1 (handle_client)] - User lol disconnected
+2025-04-08 10:09:39,999 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:09:39,999 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 10:09:46,054 - INFO - [MainThread] - New connection from ('10.14.142.202', 51374)
+2025-04-08 10:09:49,055 - INFO - [MainThread] - New connection from ('10.14.142.202', 51375)
+2025-04-08 10:09:52,107 - INFO - [MainThread] - New connection from ('10.14.142.202', 51376)
+2025-04-08 10:10:02,644 - INFO - [Thread-1 (handle_client)] - User wef connected successfully from ('10.14.142.202', 51374)
+2025-04-08 10:10:05,148 - INFO - [Thread-2 (handle_client)] - User rth connected successfully from ('10.14.142.202', 51375)
+2025-04-08 10:10:08,237 - INFO - [Thread-3 (handle_client)] - User admin connected successfully from ('10.14.142.202', 51376)
+2025-04-08 10:10:08,238 - INFO - [Thread-3 (handle_client)] - Admin user admin connected
+2025-04-08 10:10:20,218 - INFO - [Thread-1 (handle_client)] - Command from wef: /join nig
+2025-04-08 10:10:20,218 - INFO - [Thread-1 (handle_client)] - User wef joined channel nig
+2025-04-08 10:10:23,378 - INFO - [Thread-2 (handle_client)] - Command from rth: /join nig
+2025-04-08 10:10:23,378 - INFO - [Thread-2 (handle_client)] - User rth joined channel nig
+2025-04-08 10:10:27,668 - INFO - [Thread-1 (handle_client)] - Command from wef: /help
+2025-04-08 10:10:27,668 - INFO - [Thread-1 (handle_client)] - User wef requested help
+2025-04-08 10:10:31,053 - INFO - [Thread-3 (handle_client)] - Command from admin: /help
+2025-04-08 10:10:31,054 - INFO - [Thread-3 (handle_client)] - User admin requested help
+2025-04-08 10:10:39,952 - INFO - [Thread-3 (handle_client)] - Command from admin: /kick wef
+2025-04-08 10:10:39,953 - ERROR - [Thread-1 (handle_client)] - Error handling message from wef: [Errno 9] Bad file descriptor
+2025-04-08 10:10:39,953 - INFO - [Thread-3 (handle_client)] - User wef kicked by admin admin
+2025-04-08 10:10:39,954 - INFO - [Thread-3 (handle_client)] - Admin admin kicked user wef
+2025-04-08 10:10:55,790 - INFO - [Thread-3 (handle_client)] - User admin disconnected
+2025-04-08 10:10:56,802 - INFO - [Thread-2 (handle_client)] - User rth disconnected
+2025-04-08 10:13:33,230 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:13:33,230 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 10:13:36,487 - INFO - [MainThread] - New connection from ('10.14.142.202', 51416)
+2025-04-08 10:13:38,840 - INFO - [MainThread] - New connection from ('10.14.142.202', 51417)
+2025-04-08 10:13:40,064 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:13:40,064 - ERROR - [MainThread] - Failed to initialize server socket: [Errno 48] Address already in use
+2025-04-08 10:13:40,064 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 10:13:40,064 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 10:13:41,846 - INFO - [MainThread] - New connection from ('10.14.142.202', 51418)
+2025-04-08 10:13:44,292 - INFO - [Thread-1 (handle_client)] - User aeg connected successfully from ('10.14.142.202', 51416)
+2025-04-08 10:13:46,182 - INFO - [Thread-2 (handle_client)] - User dth connected successfully from ('10.14.142.202', 51417)
+2025-04-08 10:13:47,901 - INFO - [Thread-3 (handle_client)] - User admin connected successfully from ('10.14.142.202', 51418)
+2025-04-08 10:13:47,901 - INFO - [Thread-3 (handle_client)] - Admin user admin connected
+2025-04-08 10:13:55,354 - INFO - [Thread-3 (handle_client)] - Command from admin: /kick dth
+2025-04-08 10:13:55,355 - ERROR - [Thread-2 (handle_client)] - Error handling message from dth: [Errno 9] Bad file descriptor
+2025-04-08 10:13:55,355 - INFO - [Thread-2 (handle_client)] - User dth disconnected and removed from all channels
+2025-04-08 10:13:55,355 - ERROR - [Thread-3 (handle_client)] - Error handling message from admin: 'dth'
+2025-04-08 10:14:00,445 - INFO - [Thread-1 (handle_client)] - Command from aeg: /list
+2025-04-08 10:14:03,561 - INFO - [Thread-1 (handle_client)] - User aeg disconnected
+2025-04-08 10:20:19,008 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 10:20:19,008 - INFO - [MainThread] - Server started on 10.14.142.202:1738
+2025-04-08 10:20:28,604 - INFO - [MainThread] - New connection from ('10.14.142.202', 51584)
+2025-04-08 10:20:35,320 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.14.142.202', 51584)
+2025-04-08 10:20:40,465 - INFO - [MainThread] - New connection from ('10.14.142.202', 51585)
+2025-04-08 10:20:43,389 - INFO - [Thread-2 (handle_client)] - User wef connected successfully from ('10.14.142.202', 51585)
+2025-04-08 10:20:45,307 - INFO - [MainThread] - New connection from ('10.14.142.202', 51592)
+2025-04-08 10:20:46,882 - INFO - [Thread-3 (handle_client)] - User qwe connected successfully from ('10.14.142.202', 51592)
+2025-04-08 10:20:49,539 - INFO - [MainThread] - New connection from ('10.14.142.202', 51593)
+2025-04-08 10:20:51,009 - INFO - [Thread-4 (handle_client)] - User admin connected successfully from ('10.14.142.202', 51593)
+2025-04-08 10:20:51,009 - INFO - [Thread-4 (handle_client)] - Admin user admin connected
+2025-04-08 10:20:55,058 - INFO - [Thread-2 (handle_client)] - Message from wef in general: a
+2025-04-08 10:20:58,450 - INFO - [Thread-4 (handle_client)] - Message from admin in general: f
+2025-04-08 10:20:59,526 - INFO - [Thread-3 (handle_client)] - Message from qwe in general: sf
+2025-04-08 10:21:03,393 - INFO - [Thread-4 (handle_client)] - Command from admin: /help
+2025-04-08 10:21:03,394 - INFO - [Thread-4 (handle_client)] - User admin requested help
+2025-04-08 10:21:05,446 - INFO - [Thread-3 (handle_client)] - Command from qwe: /help
+2025-04-08 10:21:05,446 - INFO - [Thread-3 (handle_client)] - User qwe requested help
+2025-04-08 10:21:14,766 - INFO - [Thread-4 (handle_client)] - Command from admin: /makeadmin wef
+2025-04-08 10:21:14,767 - INFO - [Thread-4 (handle_client)] - Admin admin promoted wef to admin
+2025-04-08 10:21:22,344 - INFO - [Thread-4 (handle_client)] - Command from admin: /kick qwe
+2025-04-08 10:21:22,344 - INFO - [Thread-4 (handle_client)] - User qwe kicked by admin admin
+2025-04-08 10:21:22,344 - INFO - [Thread-4 (handle_client)] - Admin admin kicked user qwe
+2025-04-08 10:21:27,516 - INFO - [Thread-4 (handle_client)] - User admin disconnected
+2025-04-08 10:21:32,836 - INFO - [MainThread] - New connection from ('10.14.142.202', 51604)
+2025-04-08 10:21:35,114 - WARNING - [Thread-5 (handle_client)] - Failed to get valid username from ('10.14.142.202', 51604)
+2025-04-08 10:21:35,114 - INFO - [Thread-2 (handle_client)] - User wef disconnected
+2025-04-08 10:21:39,746 - INFO - [MainThread] - Cleaning up server resources...
+>>>>>>> refs/remotes/origin/master

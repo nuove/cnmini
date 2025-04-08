@@ -2,7 +2,6 @@ import socket
 import threading
 import json
 import argparse
-import os
 from typing import Optional
 from datetime import datetime
 from constants import (
@@ -16,6 +15,7 @@ from message import Message, MessageValidator
 class ChatClient:
     def __init__(self, server_host=HOST):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.settimeout(10)  # Set a 10-second timeout for connection
         self.server_host = server_host
         self.server_port = PORT
         self.username: Optional[str] = None
@@ -75,6 +75,12 @@ class ChatClient:
                                 to_channel=self.current_channel,
                                 body=f'{CMD_JOIN} {channel}'
                             ))
+                    elif message.lower() == CMD_HELP:
+                        self.send_message(Message(
+                            from_user=self.username,
+                            to_channel=self.current_channel,
+                            body=CMD_HELP
+                        ))
                     else:
                         self.send_message(Message(
                             from_user=self.username,
@@ -94,16 +100,26 @@ class ChatClient:
         """Receive and display messages from the server."""
         while self.running:
             try:
-                data = self.socket.recv(BUFFER_SIZE).decode('utf-8')
+                data = self.socket.recv(BUFFER_SIZE)
                 if not data:
+                    print(f"\n{Colors.RED}Connection to server lost.{Colors.END}")
+                    self.running = False
                     break
 
-                message = Message.from_json(data)
+                message = Message.from_json(data.decode('utf-8'))
                 if message:
                     self.display_message(message)
 
+            except socket.timeout:
+                # Just a timeout, continue checking if we're still running
+                continue
+            except ConnectionResetError:
+                print(f"\n{Colors.RED}Connection reset by server.{Colors.END}")
+                self.running = False
+                break
             except Exception as e:
                 print(f"{Colors.RED}Error receiving message: {e}{Colors.END}")
+                self.running = False
                 break
 
     def display_message(self, message: Message):
@@ -113,38 +129,72 @@ class ChatClient:
         if message.from_user.lower() == 'server':
             # Handle special server messages
             if message.body.startswith('Welcome to the chat server'):
-                print(f"\n{Colors.GREEN}[{timestamp}] {message.body}{Colors.END}\n")
+                # Don't show welcome message, it's redundant
+                pass
             elif message.body.startswith('You have admin privileges'):
                 self.is_admin = True
-                print(f"\n{Colors.YELLOW}[{timestamp}] {message.body}{Colors.END}\n")
+                print(f"\n{Colors.YELLOW}[Admin] You now have admin privileges{Colors.END}\n")
             elif message.body.startswith('Joined channel:'):
-                print(f"\n{Colors.GREEN}[{timestamp}] {message.body}{Colors.END}\n")
-                print(f"{Colors.YELLOW}You are now in channel: {message.body.split(': ')[1]}{Colors.END}\n")
+                channel = message.body.split(': ')[1]
+                print(f"\n{Colors.GREEN}[Channel] Joined {channel}{Colors.END}\n")
             elif message.body.startswith('You have been kicked'):
-                print(f"\n{Colors.RED}[{timestamp}] {message.body}{Colors.END}\n")
+                print(f"\n{Colors.RED}[System] You have been kicked from the server{Colors.END}\n")
                 self.running = False
             elif message.body.startswith('You have been banned'):
-                print(f"\n{Colors.RED}[{timestamp}] {message.body}{Colors.END}\n")
+                print(f"\n{Colors.RED}[System] You have been banned from the server{Colors.END}\n")
                 self.running = False
             elif message.body.startswith('You have been promoted to admin'):
                 self.is_admin = True
-                print(f"\n{Colors.YELLOW}[{timestamp}] {message.body}{Colors.END}\n")
+                print(f"\n{Colors.YELLOW}[Admin] You have been promoted to admin{Colors.END}\n")
             elif message.body.startswith('You have been demoted from admin'):
                 self.is_admin = False
-                print(f"\n{Colors.YELLOW}[{timestamp}] {message.body}{Colors.END}\n")
-            else:
-                print(f"{Colors.YELLOW}[{timestamp}] {message.body}{Colors.END}")
+                print(f"\n{Colors.YELLOW}[Admin] You have been demoted from admin{Colors.END}\n")
+            elif message.body.startswith('User joined:'):
+                # Show user join notifications
+                username = message.body.split(': ')[1]
+                print(f"{Colors.CYAN}[Join] {username} joined the chat{Colors.END}")
+            elif message.body.startswith('User left:'):
+                # Show user leave notifications
+                username = message.body.split(': ')[1]
+                print(f"{Colors.CYAN}[Leave] {username} left the chat{Colors.END}")
+            elif message.body.startswith('User kicked:'):
+                # Show user kick notifications
+                username = message.body.split(': ')[1]
+                print(f"{Colors.RED}[Kick] {username} was kicked from the server{Colors.END}")
+            elif message.body.startswith('User banned:'):
+                # Show user ban notifications
+                username = message.body.split(': ')[1]
+                print(f"{Colors.RED}[Ban] {username} was banned from the server{Colors.END}")
+            elif message.body.startswith('User promoted:'):
+                # Show user promotion notifications
+                username = message.body.split(': ')[1]
+                print(f"{Colors.YELLOW}[Admin] {username} was promoted to admin{Colors.END}")
+            elif message.body.startswith('User demoted:'):
+                # Show user demotion notifications
+                username = message.body.split(': ')[1]
+                print(f"{Colors.YELLOW}[Admin] {username} was demoted from admin{Colors.END}")
+            elif message.body == CMD_HELP or message.body.startswith('Available commands:'):
+                # Display help message
+                print(f"\n{Colors.CYAN}{message.body}{Colors.END}\n")
         else:
-            # Regular chat messages
-            if message.is_admin:
-                print(f"{Colors.PURPLE}[{timestamp}] {message.from_user} (Admin): {message.body}{Colors.END}")
-            else:
-                print(f"{Colors.BLUE}[{timestamp}] {message.from_user}: {message.body}{Colors.END}")
+            # Regular chat messages - only show if they're in the current channel
+            if message.to_channel == self.current_channel:
+                if message.is_admin:
+                    print(f"{Colors.PURPLE}[{timestamp}] {message.from_user} (Admin): {message.body}{Colors.END}")
+                else:
+                    print(f"{Colors.BLUE}[{timestamp}] {message.from_user}: {message.body}{Colors.END}")
 
     def send_message(self, message: Message):
         """Send a message to the server."""
+        if not self.running:
+            return
+            
         try:
-            self.socket.send(message.to_json().encode('utf-8'))
+            encoded_message = message.to_json().encode('utf-8')
+            self.socket.send(encoded_message)
+        except ConnectionResetError:
+            print(f"\n{Colors.RED}Connection reset by server.{Colors.END}")
+            self.running = False
         except Exception as e:
             print(f"{Colors.RED}Error sending message: {e}{Colors.END}")
             self.running = False
@@ -166,10 +216,6 @@ def main():
         client.start()
     except KeyboardInterrupt:
         print(f"\n{Colors.YELLOW}Disconnecting from server...{Colors.END}")
-    except Exception as e:
-        print(f"{Colors.RED}Error: {e}{Colors.END}")
-    finally:
-        client.cleanup()
 
 if __name__ == '__main__':
     main()

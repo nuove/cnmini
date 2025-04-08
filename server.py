@@ -15,10 +15,10 @@ from constants import (
 )
 from message import Message, MessageValidator
 
-# Configure logging
+# Configure logging with more detailed format
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format='%(asctime)s - %(levelname)s - [%(threadName)s] - %(message)s',
     handlers=[
         logging.FileHandler('server.log'),
         logging.StreamHandler()
@@ -42,13 +42,14 @@ class ChatServer:
     def __init__(self):
         self.server_socket = None
         self.clients: Dict[str, socket.socket] = {}  # username -> socket
-        self.channels: Dict[str, Set[str]] = {}  # channel -> set of usernames
+        self.channels: Dict[str, Set[str]] = {'general': set()}  # Initialize with general channel
         self.banned_users: Set[str] = set()  # Set of banned usernames
         self.admin_users: Set[str] = {DEFAULT_ADMIN}  # Set of admin users
         self.lock = threading.Lock()
         self.kicked_users: Set[str] = set()  # Set of kicked usernames
         self.running = True
         self.local_ip = get_local_ip()
+        self.client_threads = []  # Track client threads for proper cleanup
         logging.info(f"Server initialized with default admin: {DEFAULT_ADMIN}")
 
     def initialize_socket(self):
@@ -56,6 +57,7 @@ class ChatServer:
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_socket.settimeout(1.0)  # 1 second timeout for accept()
             self.server_socket.bind((HOST, PORT))
             self.server_socket.listen(5)
             logging.info(f"Server started on {self.local_ip}:{PORT}")
@@ -65,26 +67,35 @@ class ChatServer:
 
     def cleanup(self):
         """Clean up server resources."""
-        self.running = False
-        logging.info("Cleaning up server resources...")
-        
-        # Close all client connections
-        for client_socket in self.clients.values():
-            try:
-                client_socket.close()
-            except:
-                pass
-        
-        # Close server socket
-        if self.server_socket:
-            try:
-                self.server_socket.close()
-            except:
-                pass
-        
-        self.clients.clear()
-        self.channels.clear()
-        logging.info("Server cleanup completed")
+        if not hasattr(self, '_cleanup_done'):
+            self._cleanup_done = True
+            self.running = False
+            logging.info("Cleaning up server resources...")
+            
+            # Close all client connections
+            with self.lock:
+                for client_socket in list(self.clients.values()):
+                    try:
+                        client_socket.close()
+                    except Exception as e:
+                        logging.error(f"Error closing client socket: {e}")
+            
+            # Close server socket
+            if self.server_socket:
+                try:
+                    self.server_socket.close()
+                except Exception as e:
+                    logging.error(f"Error closing server socket: {e}")
+            
+            # Clear data structures
+            self.clients.clear()
+            self.kicked_users.clear()
+            
+            # Keep channels and admin_users for persistence
+            # Clear client threads list
+            self.client_threads.clear()
+            
+            logging.info("Server cleanup completed")
 
     def start(self):
         """Start the server and listen for connections."""
@@ -104,7 +115,10 @@ class ChatServer:
                     client_socket, address = self.server_socket.accept()
                     logging.info(f"New connection from {address}")
                     print(f"{Colors.CYAN}New connection from {address}{Colors.END}")
-                    threading.Thread(target=self.handle_client, args=(client_socket,)).start()
+                    client_thread = threading.Thread(target=self.handle_client, args=(client_socket,))
+                    client_thread.daemon = True  # Make thread daemon so it exits when main thread exits
+                    self.client_threads.append(client_thread)
+                    client_thread.start()
                 except socket.timeout:
                     # This is expected due to the socket timeout
                     continue
@@ -122,17 +136,22 @@ class ChatServer:
 
     def handle_client(self, client_socket: socket.socket):
         """Handle a new client connection."""
+        username = None
         try:
+            # Set timeout for initial communication
+            client_socket.settimeout(10.0)
+            
             # Get username
             username = self.get_username(client_socket)
             if not username:
-                logging.warning(f"Failed to get valid username from {client_socket.getpeername()}")
+                client_addr = client_socket.getpeername()
+                logging.warning(f"Failed to get valid username from {client_addr}")
                 client_socket.close()
                 return
 
             # Check if user is banned
             if username in self.banned_users:
-                logging.warning(f"Banned user {username} attempted to connect")
+                logging.warning(f"Banned user {username} attempted to connect from {client_socket.getpeername()}")
                 ban_msg = Message(
                     from_user='server',
                     to_channel=username,
@@ -143,11 +162,14 @@ class ChatServer:
                 client_socket.close()
                 return
 
+            # Set a longer timeout for regular operation
+            client_socket.settimeout(60.0)
+
             with self.lock:
                 self.clients[username] = client_socket
-                self.channels['general'] = self.channels.get('general', set()) | {username}
+                self.channels['general'].add(username)
 
-            logging.info(f"User {username} connected successfully")
+            logging.info(f"User {username} connected successfully from {client_socket.getpeername()}")
             if username in self.admin_users:
                 logging.info(f"Admin user {username} connected")
 
@@ -160,6 +182,15 @@ class ChatServer:
             )
             self.send_message(client_socket, welcome_msg)
 
+            # Notify others about new user
+            notify_msg = Message(
+                from_user='server',
+                to_channel='general',
+                body=f"User joined: {username}",
+                is_admin=True
+            )
+            self.broadcast_message(notify_msg)
+
             # If user is admin, send admin commands list
             if username in self.admin_users:
                 admin_welcome = Message(
@@ -171,32 +202,48 @@ class ChatServer:
                 self.send_message(client_socket, admin_welcome)
 
             # Handle client messages
-            while True:
+            while self.running:
                 try:
-                    data = client_socket.recv(BUFFER_SIZE).decode('utf-8')
+                    data = client_socket.recv(BUFFER_SIZE)
                     if not data:
+                        logging.info(f"User {username} disconnected")
                         break
 
-                    message = Message.from_json(data)
+                    message = Message.from_json(data.decode('utf-8'))
                     if not message:
+                        logging.warning(f"Received invalid message from {username}")
                         continue
 
                     if message.body.startswith('/'):
-                        self.handle_command(username, message)
+                        logging.info(f"Command from {username}: {message.body}")
+                        self.handle_command(username, message, client_socket)
                     else:
-                        self.broadcast_message(message)
                         logging.info(f"Message from {username} in {message.to_channel}: {message.body}")
+                        self.broadcast_message(message)
 
+                except socket.timeout:
+                    # Just a timeout, check if server is still running
+                    continue
+                except ConnectionResetError:
+                    logging.warning(f"Connection reset by {username}")
+                    break
                 except Exception as e:
                     logging.error(f"Error handling message from {username}: {e}")
                     break
 
         except Exception as e:
-            logging.error(f"Error in client handler for {username}: {e}")
+            client_addr = client_socket.getpeername() if hasattr(client_socket, 'getpeername') else "unknown"
+            logging.error(f"Error in client handler for {username or client_addr}: {e}")
         finally:
-            self.handle_client_disconnect(username)
+            if username:
+                self.handle_client_disconnect(username)
+            else:
+                try:
+                    client_socket.close()
+                except:
+                    pass
 
-    def handle_command(self, username: str, message: Message):
+    def handle_command(self, username: str, message: Message, client_socket: socket.socket):
         """Handle client commands."""
         command, argument = MessageValidator.parse_command(message.body)
         is_admin = username in self.admin_users
@@ -218,58 +265,96 @@ class ChatServer:
                 self.handle_ban(username, argument)
                 logging.info(f"Admin {username} banned user {argument}")
             elif command == CMD_MAKEADMIN:
-                self.handle_make_admin(username, argument)
+                self.handle_make_admin(message, client_socket)
                 logging.info(f"Admin {username} promoted {argument} to admin")
             elif command == CMD_REMOVEADMIN:
-                self.handle_remove_admin(username, argument)
+                self.handle_remove_admin(message, client_socket)
                 logging.info(f"Admin {username} demoted {argument} from admin")
             elif command == CMD_LISTADMINS:
                 self.handle_list_admins(username)
                 logging.info(f"Admin {username} requested admin list")
+        else:
+            # Send permission denied message for admin commands
+            self.send_message(client_socket, Message(
+                from_user='server',
+                to_channel=username,
+                body="You don't have permission to use this command.",
+                is_admin=True
+            ))
 
-    def handle_make_admin(self, admin: str, target: str):
-        """Handle makeadmin command."""
-        if target in self.clients and target not in self.admin_users:
-            self.admin_users.add(target)
-            notify_msg = Message(
+    def handle_make_admin(self, message: Message, client_socket: socket.socket):
+        """Handle make admin command."""
+        if not self.is_admin(message.from_user):
+            self.send_message(client_socket, Message(
                 from_user='server',
-                to_channel='general',
-                body=f"{target} has been promoted to admin by {admin}",
-                is_admin=True
-            )
-            self.broadcast_message(notify_msg)
-            
-            # Notify the new admin
-            admin_msg = Message(
-                from_user='server',
-                to_channel=target,
-                body="You have been promoted to admin. Use /help to see available commands.",
-                is_admin=True
-            )
-            self.send_message(self.clients[target], admin_msg)
-            logging.info(f"User {target} promoted to admin by {admin}")
+                to_channel='',
+                body='You do not have permission to make users admin.'
+            ))
+            return
 
-    def handle_remove_admin(self, admin: str, target: str):
-        """Handle removeadmin command."""
-        if target in self.clients and target in self.admin_users and target != DEFAULT_ADMIN:
-            self.admin_users.remove(target)
-            notify_msg = Message(
+        target_username = message.body.split(' ', 1)[1].strip()
+        if target_username in self.clients:
+            target_socket = self.clients[target_username]
+            self.admin_users.add(target_username)
+            self.send_message(target_socket, Message(
                 from_user='server',
-                to_channel='general',
-                body=f"{target} has been demoted from admin by {admin}",
-                is_admin=True
-            )
-            self.broadcast_message(notify_msg)
-            
-            # Notify the demoted user
-            demote_msg = Message(
+                to_channel='',
+                body='You have been promoted to admin.'
+            ))
+            self.send_message(client_socket, Message(
                 from_user='server',
-                to_channel=target,
-                body="You have been demoted from admin.",
-                is_admin=True
-            )
-            self.send_message(self.clients[target], demote_msg)
-            logging.info(f"User {target} demoted from admin by {admin}")
+                to_channel='',
+                body=f'User {target_username} has been promoted to admin.'
+            ))
+            # Broadcast to all users
+            self.broadcast_message(Message(
+                from_user='server',
+                to_channel='',
+                body=f'User promoted: {target_username}'
+            ))
+        else:
+            self.send_message(client_socket, Message(
+                from_user='server',
+                to_channel='',
+                body=f'User {target_username} not found.'
+            ))
+
+    def handle_remove_admin(self, message: Message, client_socket: socket.socket):
+        """Handle remove admin command."""
+        if not self.is_admin(message.from_user):
+            self.send_message(client_socket, Message(
+                from_user='server',
+                to_channel='',
+                body='You do not have permission to remove admin status.'
+            ))
+            return
+
+        target_username = message.body.split(' ', 1)[1].strip()
+        if target_username in self.admin_users:
+            target_socket = self.clients[target_username]
+            self.admin_users.discard(target_username)
+            self.send_message(target_socket, Message(
+                from_user='server',
+                to_channel='',
+                body='You have been demoted from admin.'
+            ))
+            self.send_message(client_socket, Message(
+                from_user='server',
+                to_channel='',
+                body=f'User {target_username} has been demoted from admin.'
+            ))
+            # Broadcast to all users
+            self.broadcast_message(Message(
+                from_user='server',
+                to_channel='',
+                body=f'User demoted: {target_username}'
+            ))
+        else:
+            self.send_message(client_socket, Message(
+                from_user='server',
+                to_channel='',
+                body=f'User {target_username} not found.'
+            ))
 
     def handle_list_admins(self, username: str):
         """Handle listadmins command."""
@@ -285,15 +370,16 @@ class ChatServer:
 
     def handle_help(self, username: str, is_admin: bool):
         """Handle help command."""
-        help_text = "Available commands:\n"
-        help_text += f"{CMD_JOIN} <channel> - Join a channel\n"
-        help_text += f"{CMD_EXIT} - Exit the chat\n"
+        help_lines = ["Available commands:"]
+        help_lines.append(f"{CMD_JOIN} <channel> - Join a channel")
+        help_lines.append(f"{CMD_EXIT} - Exit the chat")
         
         if is_admin:
-            help_text += "\nAdmin commands:\n"
+            help_lines.append("\nAdmin commands:")
             for cmd, desc in ADMIN_COMMANDS.items():
-                help_text += f"{desc}\n"
+                help_lines.append(f"{desc}")
         
+        help_text = "\n".join(help_lines)
         help_msg = Message(
             from_user='server',
             to_channel=username,
@@ -303,88 +389,94 @@ class ChatServer:
         self.send_message(self.clients[username], help_msg)
 
     def handle_kick(self, admin: str, target: str):
-        """Handle kick command from admin."""
-        if target in self.clients and target != admin:
-            self.kicked_users.add(target)
+        """Handle kick command."""
+        if target in self.clients and target not in self.admin_users:
             kick_msg = Message(
                 from_user='server',
                 to_channel=target,
-                body=f"You have been kicked by {admin}",
+                body=f"You have been kicked by admin {admin}",
                 is_admin=True
             )
             self.send_message(self.clients[target], kick_msg)
-            self.handle_client_disconnect(target)
+            self.kicked_users.add(target)
+            self.clients[target].close()
+            del self.clients[target]
             
-            # Notify others
+            # Notify others about kick
             notify_msg = Message(
                 from_user='server',
                 to_channel='general',
-                body=f"{target} has been kicked by {admin}",
+                body=f"User kicked: {target}",
                 is_admin=True
             )
             self.broadcast_message(notify_msg)
+            
             logging.info(f"User {target} kicked by admin {admin}")
 
     def handle_ban(self, admin: str, target: str):
-        """Handle ban command from admin."""
-        if target in self.clients and target != admin:
-            self.banned_users.add(target)
+        """Handle ban command."""
+        if target in self.clients and target not in self.admin_users:
             ban_msg = Message(
                 from_user='server',
                 to_channel=target,
-                body=f"You have been banned by {admin}",
+                body=f"You have been banned by admin {admin}",
                 is_admin=True
             )
             self.send_message(self.clients[target], ban_msg)
-            self.handle_client_disconnect(target)
+            self.banned_users.add(target)
+            self.clients[target].close()
+            del self.clients[target]
             
-            # Notify others
+            # Notify others about ban
             notify_msg = Message(
                 from_user='server',
                 to_channel='general',
-                body=f"{target} has been banned by {admin}",
+                body=f"User banned: {target}",
                 is_admin=True
             )
             self.broadcast_message(notify_msg)
+            
             logging.info(f"User {target} banned by admin {admin}")
 
     def handle_client_disconnect(self, username: str):
         """Handle client disconnection."""
-        with self.lock:
-            if username in self.clients:
-                self.clients[username].close()
-                del self.clients[username]
-            
-            # Remove user from all channels
-            for channel in self.channels:
-                if username in self.channels[channel]:
-                    self.channels[channel].remove(username)
-            
-            # Remove empty channels
-            self.channels = {k: v for k, v in self.channels.items() if v}
-
-            # Notify others only if it wasn't a kick/ban
-            if username not in self.kicked_users and username not in self.banned_users:
-                disconnect_msg = Message(
-                    from_user='server',
-                    to_channel='general',
-                    body=f"{username} has left the chat",
-                    is_admin=True
-                )
-                self.broadcast_message(disconnect_msg)
-                logging.info(f"User {username} disconnected normally")
-
-            # Clean up kicked users set
-            if username in self.kicked_users:
-                self.kicked_users.remove(username)
+        try:
+            with self.lock:
+                if username in self.clients:
+                    self.clients[username].close()
+                    del self.clients[username]
+                    # Remove from all channels
+                    for channel in self.channels:
+                        if username in self.channels[channel]:
+                            self.channels[channel].remove(username)
+                    
+                    # Notify others about user leaving
+                    if username not in self.kicked_users and username not in self.banned_users:
+                        notify_msg = Message(
+                            from_user='server',
+                            to_channel='general',
+                            body=f"User left: {username}",
+                            is_admin=True
+                        )
+                        self.broadcast_message(notify_msg)
+                    
+                    logging.info(f"User {username} disconnected and removed from all channels")
+        except Exception as e:
+            logging.error(f"Error during client disconnect for {username}: {e}")
 
     def broadcast_message(self, message: Message):
         """Broadcast message to appropriate channel."""
+        # Pre-encode the message to JSON once
+        encoded_message = message.to_json().encode('utf-8')
+        
         with self.lock:
             if message.to_channel in self.channels:
-                for username in self.channels[message.to_channel]:
-                    if username in self.clients:
-                        self.send_message(self.clients[username], message)
+                recipients = self.channels[message.to_channel].intersection(self.clients.keys())
+                for username in recipients:
+                    try:
+                        self.clients[username].send(encoded_message)
+                    except Exception as e:
+                        logging.error(f"Error broadcasting to {username}: {e}")
 
     def send_message(self, client_socket: socket.socket, message: Message):
         """Send message to a client."""
@@ -417,15 +509,21 @@ class ChatServer:
             return
 
         with self.lock:
-            # Leave current channel
-            for ch in self.channels:
+            # Remove user from all current channels
+            current_channels = []
+            for ch in list(self.channels.keys()):
                 if username in self.channels[ch]:
                     self.channels[ch].remove(username)
+                    current_channels.append(ch)
+                    # Clean up empty channels (except 'general')
+                    if not self.channels[ch] and ch != 'general':
+                        del self.channels[ch]
 
             # Join new channel
             if channel not in self.channels:
-                self.channels[channel] = set()
-            self.channels[channel].add(username)
+                self.channels[channel] = set([username])
+            else:
+                self.channels[channel].add(username)
 
             # Notify client
             self.send_message(self.clients[username], Message(
@@ -439,18 +537,24 @@ class ChatServer:
         """Handle exit command."""
         self.handle_client_disconnect(username)
 
-if __name__ == "__main__":
-    server = ChatServer()
-    
-    def signal_handler(sig, frame):
-        print(f"\n{Colors.YELLOW}Shutting down server...{Colors.END}")
-        server.cleanup()
-        sys.exit(0)
-    
-    # Register signal handlers for graceful shutdown
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-    
+    def is_admin(self, username: str) -> bool:
+        """Check if a user is an admin."""
+        return username in self.admin_users
+
+# Create server instance
+server = ChatServer()
+
+def signal_handler(sig, frame):
+    print(f"\n{Colors.YELLOW}Shutting down server...{Colors.END}")
+    server.cleanup()
+    # Use os._exit instead of sys.exit to force immediate termination
+    os._exit(0)
+
+# Register signal handlers for graceful shutdown
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+if __name__ == '__main__':
     try:
         server.start()
     except Exception as e:

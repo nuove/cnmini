@@ -41,8 +41,16 @@ class Message:
         """Create a Message instance from a JSON string."""
         try:
             data = json.loads(json_str)
-            return Message.from_dict(data)
-        except (json.JSONDecodeError, KeyError):
+            msg = Message(
+                from_user=data['from'],
+                to_channel=data['to'],
+                body=data['body'],
+                is_admin=data.get('isAdmin', False)
+            )
+            if 'timestamp' in data:
+                msg.timestamp = data['timestamp']
+            return msg
+        except (json.JSONDecodeError, KeyError) as e:
             return None
 
 class MessageValidator:
