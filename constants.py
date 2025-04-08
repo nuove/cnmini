@@ -9,11 +9,11 @@ BUFFER_SIZE = 4096
 # Admin Configuration
 DEFAULT_ADMIN = 'admin'
 ADMIN_COMMANDS = {
-    'kick': '/kick <username>',
-    'ban': '/ban <username>',
-    'makeadmin': '/makeadmin <username>',
-    'removeadmin': '/removeadmin <username>',
-    'listadmins': '/listadmins'
+    '/kick': 'Kick <username> from channel',
+    '/ban': 'Ban <username> from channel',
+    '/makeadmin': 'Elevate <username> to Admin',
+    '/removeadmin': 'Remove <username> as Admin',
+    '/listadmins': 'List all admins in channel'
 }
 
 # Commands

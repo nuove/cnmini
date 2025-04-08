@@ -240,8 +240,8 @@ class ChatServer:
             else:
                 try:
                     client_socket.close()
-                except:
-                    pass
+                except Exception as e:
+                    logging.error(f"Error closing socket for {client_addr}: {e}")
 
     def handle_command(self, username: str, message: Message, client_socket: socket.socket):
         """Handle client commands."""
@@ -266,10 +266,10 @@ class ChatServer:
                 logging.info(f"Admin {username} banned user {argument}")
             elif command == CMD_MAKEADMIN:
                 self.handle_make_admin(message, client_socket)
-                logging.info(f"Admin {username} promoted {argument} to admin")
+                logging.info(f"Admin {username} promoted {argument} to Admin")
             elif command == CMD_REMOVEADMIN:
                 self.handle_remove_admin(message, client_socket)
-                logging.info(f"Admin {username} demoted {argument} from admin")
+                logging.info(f"Admin {username} demoted {argument} from Admin")
             elif command == CMD_LISTADMINS:
                 self.handle_list_admins(username)
                 logging.info(f"Admin {username} requested admin list")
@@ -370,14 +370,14 @@ class ChatServer:
 
     def handle_help(self, username: str, is_admin: bool):
         """Handle help command."""
-        help_lines = ["Available commands:"]
+        help_lines = ["User commands:"]
         help_lines.append(f"{CMD_JOIN} <channel> - Join a channel")
         help_lines.append(f"{CMD_EXIT} - Exit the chat")
         
         if is_admin:
             help_lines.append("\nAdmin commands:")
             for cmd, desc in ADMIN_COMMANDS.items():
-                help_lines.append(f"{desc}")
+                help_lines.append(f"{cmd} - {desc}")
         
         help_text = "\n".join(help_lines)
         help_msg = Message(

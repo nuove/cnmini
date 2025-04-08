@@ -361,3 +361,86 @@
 2025-04-08 10:21:35,114 - INFO - [Thread-2 (handle_client)] - User wef disconnected
 2025-04-08 10:21:39,746 - INFO - [MainThread] - Cleaning up server resources...
 >>>>>>> refs/remotes/origin/master
+2025-04-08 11:38:14,347 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 11:38:14,348 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 11:38:17,371 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 11:38:17,372 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 11:38:24,712 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 11:38:24,713 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 11:38:26,732 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 11:38:26,733 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 11:41:45,023 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 11:41:45,024 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 11:42:11,165 - INFO - [MainThread] - New connection from ('10.1.0.32', 10052)
+2025-04-08 11:42:13,206 - INFO - [Thread-1 (handle_client)] - User agni connected successfully from ('10.1.0.32', 10052)
+2025-04-08 11:42:18,567 - INFO - [Thread-1 (handle_client)] - Command from agni: /help
+2025-04-08 11:42:18,567 - INFO - [Thread-1 (handle_client)] - User agni requested help
+2025-04-08 11:42:20,911 - INFO - [Thread-1 (handle_client)] - Command from agni: /exit
+2025-04-08 11:42:24,214 - INFO - [MainThread] - New connection from ('10.1.0.32', 10055)
+2025-04-08 11:43:03,375 - INFO - [MainThread] - New connection from ('10.1.0.32', 10059)
+2025-04-08 11:43:24,512 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 11:44:40,285 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 11:44:40,285 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 11:44:48,287 - INFO - [MainThread] - New connection from ('10.1.0.32', 10075)
+2025-04-08 11:44:50,235 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 10075)
+2025-04-08 11:44:50,236 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 11:44:53,685 - INFO - [Thread-1 (handle_client)] - Message from admin in general: testing
+2025-04-08 11:45:03,599 - INFO - [Thread-1 (handle_client)] - Command from admin: /makeadmin agni
+2025-04-08 11:45:03,600 - INFO - [Thread-1 (handle_client)] - Admin admin promoted agni to admin
+2025-04-08 11:45:11,827 - INFO - [Thread-1 (handle_client)] - Message from admin in general: hello
+2025-04-08 11:45:44,936 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-08 11:45:48,673 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 11:56:34,881 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 11:56:34,882 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 11:56:41,865 - INFO - [MainThread] - New connection from ('10.1.0.32', 10195)
+2025-04-08 11:56:43,571 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 10195)
+2025-04-08 11:56:43,572 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 11:56:45,783 - INFO - [Thread-1 (handle_client)] - Command from admin: /help
+2025-04-08 11:56:45,784 - INFO - [Thread-1 (handle_client)] - User admin requested help
+2025-04-08 12:01:13,928 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-08 12:01:17,156 - INFO - [MainThread] - New connection from ('10.1.0.32', 10230)
+2025-04-08 12:02:22,563 - INFO - [MainThread] - New connection from ('10.1.0.32', 10244)
+2025-04-08 12:02:38,681 - INFO - [MainThread] - New connection from ('10.1.0.32', 10248)
+2025-04-08 12:05:01,150 - INFO - [MainThread] - New connection from ('10.1.0.32', 10310)
+2025-04-08 12:05:36,369 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 12:05:53,215 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 12:05:53,216 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 12:05:55,969 - INFO - [MainThread] - New connection from ('10.1.0.32', 10319)
+2025-04-08 12:05:58,025 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 10319)
+2025-04-08 12:05:58,026 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 12:06:00,590 - INFO - [Thread-1 (handle_client)] - Command from admin: /help
+2025-04-08 12:06:00,590 - INFO - [Thread-1 (handle_client)] - User admin requested help
+2025-04-08 12:08:39,582 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-08 12:08:41,056 - INFO - [MainThread] - New connection from ('10.1.0.32', 10361)
+2025-04-08 12:08:52,122 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 12:09:04,595 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 12:09:04,596 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 12:09:06,345 - INFO - [MainThread] - New connection from ('10.1.0.32', 10370)
+2025-04-08 12:09:07,723 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 10370)
+2025-04-08 12:09:07,724 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 12:09:09,124 - INFO - [Thread-1 (handle_client)] - Command from admin: /help
+2025-04-08 12:09:09,125 - INFO - [Thread-1 (handle_client)] - User admin requested help
+2025-04-08 12:12:40,208 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-08 12:12:42,107 - INFO - [MainThread] - New connection from ('10.1.0.32', 10413)
+2025-04-08 12:12:53,161 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 12:13:04,010 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 12:13:04,011 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 12:13:05,747 - INFO - [MainThread] - New connection from ('10.1.0.32', 10421)
+2025-04-08 12:13:07,243 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 10421)
+2025-04-08 12:13:07,244 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 12:13:18,517 - INFO - [Thread-1 (handle_client)] - Command from admin: /help
+2025-04-08 12:13:18,517 - INFO - [Thread-1 (handle_client)] - User admin requested help
+2025-04-08 12:14:18,238 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 12:14:18,240 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 12:14:18,240 - ERROR - [Thread-1 (handle_client)] - Error handling message from admin: [WinError 10038] An operation was attempted on something that is not a socket
+2025-04-08 12:14:25,348 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 12:14:25,349 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 12:14:29,593 - INFO - [MainThread] - New connection from ('10.1.0.32', 10441)
+2025-04-08 12:14:31,784 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 10441)
+2025-04-08 12:14:31,785 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 12:14:36,794 - INFO - [Thread-1 (handle_client)] - Command from admin: /help
+2025-04-08 12:14:36,795 - INFO - [Thread-1 (handle_client)] - User admin requested help
+2025-04-08 12:14:42,984 - INFO - [Thread-1 (handle_client)] - Message from admin in general: ok
+2025-04-08 12:14:45,706 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-08 12:14:45,707 - ERROR - [Thread-1 (handle_client)] - Error handling message from admin: [WinError 10038] An operation was attempted on something that is not a socket
+2025-04-08 12:14:45,708 - INFO - [MainThread] - Server cleanup completed

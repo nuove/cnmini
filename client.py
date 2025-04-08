@@ -50,10 +50,18 @@ class ChatClient:
 
             # Main message sending loop
             print(f"\n{Colors.GREEN}Connected to server!{Colors.END}")
-            print(f"{Colors.CYAN}Available commands:{Colors.END}")
+            print(f"{Colors.CYAN}User commands:{Colors.END}")
             print(f"  {CMD_JOIN} <channel> - Join a channel")
             print(f"  {CMD_EXIT} - Exit the chat")
             print(f"  {CMD_HELP} - Show all commands")
+            
+            if self.username == "admin" or self.is_admin:
+                print(f"  {CMD_KICK} - Kick <username> from channel")
+                print(f"  {CMD_BAN} <username> - Ban <username> from channel")
+                print(f"  {CMD_MAKEADMIN} <username> - Elevate <username> to Admin")
+                print(f"  {CMD_REMOVEADMIN} <username> - Remove <username> as Admin")
+                print(f"  {CMD_LISTADMINS} - List all admins in channel")
+                
             print(f"\n{Colors.YELLOW}You are in channel: {self.current_channel}{Colors.END}\n")
 
             while self.running:
@@ -173,7 +181,7 @@ class ChatClient:
                 # Show user demotion notifications
                 username = message.body.split(': ')[1]
                 print(f"{Colors.YELLOW}[Admin] {username} was demoted from admin{Colors.END}")
-            elif message.body == CMD_HELP or message.body.startswith('Available commands:'):
+            elif message.body == CMD_HELP or message.body.startswith('User commands:'):
                 # Display help message
                 print(f"\n{Colors.CYAN}{message.body}{Colors.END}\n")
         else:
