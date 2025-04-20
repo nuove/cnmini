@@ -1,4 +1,3 @@
-import socket
 from datetime import datetime, timezone
 
 # Network Configuration
@@ -16,7 +15,8 @@ ADMIN_COMMANDS = {
     '/listadmins': 'List all admins in channel'
 }
 
-# Commands
+# Commands/User Config
+DEFAULT_USER = 'user'
 CMD_JOIN = '/join'
 CMD_EXIT = '/exit'
 CMD_KICK = '/kick'
@@ -25,6 +25,7 @@ CMD_MAKEADMIN = '/makeadmin'
 CMD_REMOVEADMIN = '/removeadmin'
 CMD_LISTADMINS = '/listadmins'
 CMD_HELP = '/help'
+CMD_LISTUSERS = '/listusers'
 
 # Validation
 USERNAME_MIN_LENGTH = 3

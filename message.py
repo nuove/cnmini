@@ -51,6 +51,7 @@ class Message:
                 msg.timestamp = data['timestamp']
             return msg
         except (json.JSONDecodeError, KeyError) as e:
+            print("Error parsing json", e)
             return None
 
 class MessageValidator:

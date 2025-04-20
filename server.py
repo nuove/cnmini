@@ -1,17 +1,19 @@
-import socket
 import threading
-import json
+from platform import system
+from multiprocessing import Process
 import logging
+import socket
 import signal
 import sys
 import os
-from datetime import datetime
+import time
+
 from typing import Dict, Set
 from constants import (
-    HOST, PORT, BUFFER_SIZE, DEFAULT_ADMIN,
+    HOST, PORT, BUFFER_SIZE, DEFAULT_ADMIN, DEFAULT_USER,
     CMD_JOIN, CMD_EXIT, CMD_KICK, CMD_BAN,
     CMD_MAKEADMIN, CMD_REMOVEADMIN, CMD_LISTADMINS,
-    CMD_HELP, ADMIN_COMMANDS, Colors
+    CMD_HELP, CMD_LISTUSERS, ADMIN_COMMANDS, Colors
 )
 from message import Message, MessageValidator
 
@@ -44,12 +46,14 @@ class ChatServer:
         self.clients: Dict[str, socket.socket] = {}  # username -> socket
         self.channels: Dict[str, Set[str]] = {'general': set()}  # Initialize with general channel
         self.banned_users: Set[str] = set()  # Set of banned usernames
+        self.users: Set[str] = {DEFAULT_USER}
         self.admin_users: Set[str] = {DEFAULT_ADMIN}  # Set of admin users
         self.lock = threading.Lock()
         self.kicked_users: Set[str] = set()  # Set of kicked usernames
         self.running = True
         self.local_ip = get_local_ip()
         self.client_threads = []  # Track client threads for proper cleanup
+        self.all_users: Set[str] = set()  # Track all users who have ever joined
         logging.info(f"Server initialized with default admin: {DEFAULT_ADMIN}")
 
     def initialize_socket(self):
@@ -67,6 +71,7 @@ class ChatServer:
 
     def cleanup(self):
         """Clean up server resources."""
+        # kill_process()
         if not hasattr(self, '_cleanup_done'):
             self._cleanup_done = True
             self.running = False
@@ -109,6 +114,9 @@ class ChatServer:
             print(f"{Colors.YELLOW}Default Admin: {DEFAULT_ADMIN}{Colors.END}")
             print(f"{Colors.CYAN}Logging to: server.log{Colors.END}")
             print(f"\n{Colors.YELLOW}Press Ctrl+C to stop the server{Colors.END}")
+
+            # Start the user list broadcaster thread
+            threading.Thread(target=self.broadcast_user_list_periodically, daemon=True).start()
 
             while self.running:
                 try:
@@ -172,6 +180,10 @@ class ChatServer:
             logging.info(f"User {username} connected successfully from {client_socket.getpeername()}")
             if username in self.admin_users:
                 logging.info(f"Admin user {username} connected")
+                self.admin_users.add(username)
+            elif username in self.users :
+                logging.info(f"User {username} connected")
+                self.users.add(username)
 
             # Send welcome message
             welcome_msg = Message(
@@ -250,29 +262,23 @@ class ChatServer:
 
         if command == CMD_JOIN:
             self.handle_join(username, argument)
-            logging.info(f"User {username} joined channel {argument}")
         elif command == CMD_EXIT:
             self.handle_exit(username)
-            logging.info(f"User {username} exited")
         elif command == CMD_HELP:
             self.handle_help(username, is_admin)
-            logging.info(f"User {username} requested help")
+        elif command == CMD_LISTUSERS:  # Handle /listusers
+            self.handle_list_users(username)
         elif is_admin:
             if command == CMD_KICK:
                 self.handle_kick(username, argument)
-                logging.info(f"Admin {username} kicked user {argument}")
             elif command == CMD_BAN:
                 self.handle_ban(username, argument)
-                logging.info(f"Admin {username} banned user {argument}")
             elif command == CMD_MAKEADMIN:
                 self.handle_make_admin(message, client_socket)
-                logging.info(f"Admin {username} promoted {argument} to Admin")
             elif command == CMD_REMOVEADMIN:
                 self.handle_remove_admin(message, client_socket)
-                logging.info(f"Admin {username} demoted {argument} from Admin")
             elif command == CMD_LISTADMINS:
                 self.handle_list_admins(username)
-                logging.info(f"Admin {username} requested admin list")
         else:
             # Send permission denied message for admin commands
             self.send_message(client_socket, Message(
@@ -281,6 +287,18 @@ class ChatServer:
                 body="You don't have permission to use this command.",
                 is_admin=True
             ))
+
+    def handle_list_users(self, username: str):
+        """Handle /listusers command."""
+        user_list = ", ".join(sorted(self.users))
+        list_msg = Message(
+            from_user='server',
+            to_channel=username,
+            body=f"Current users: {user_list}",
+            is_admin=True
+        )
+        self.send_message(self.clients[username], list_msg)
+        logging.info(f"User list requested by {username}")
 
     def handle_make_admin(self, message: Message, client_socket: socket.socket):
         """Handle make admin command."""
@@ -373,6 +391,7 @@ class ChatServer:
         help_lines = ["User commands:"]
         help_lines.append(f"{CMD_JOIN} <channel> - Join a channel")
         help_lines.append(f"{CMD_EXIT} - Exit the chat")
+        help_lines.append(f"{CMD_LISTUSERS} - List users in the current channel")
         
         if is_admin:
             help_lines.append("\nAdmin commands:")
@@ -498,7 +517,10 @@ class ChatServer:
                 if message.from_user in self.clients:
                     return None
                     
-            return message.from_user
+            username = message.from_user  # existing logic
+            if username:
+                self.all_users.add(username)
+            return username
         except Exception as e:
             logging.error(f"Error getting username: {e}")
             return None
@@ -541,6 +563,19 @@ class ChatServer:
         """Check if a user is an admin."""
         return username in self.admin_users
 
+    def broadcast_user_list_periodically(self):
+        while self.running:
+            user_list_msg = Message(
+                from_user='server',
+                to_channel='',
+                body='USERLIST:' + ','.join(self.all_users),
+                is_admin=True
+            )
+            with self.lock:
+                for client in self.clients.values():
+                    self.send_message(client, user_list_msg)
+            time.sleep(3)
+
 # Create server instance
 server = ChatServer()
 
@@ -549,10 +584,27 @@ def signal_handler(sig, frame):
     server.cleanup()
     # Use os._exit instead of sys.exit to force immediate termination
     os._exit(0)
+    
+def kill_process():
+    """Kill the server process."""
+    p = Process(target=server.cleanup)
+    p.start()
+    p.join(10)  # Wait for 10 seconds for cleanup to finish
+    if p.is_alive():
+        print(f"{Colors.RED}Server process is still running. Force killing...{Colors.END}")
+        p.terminate()
+        p.join()
+    print(f"{Colors.RED}Server process terminated.{Colors.END}")
+    server.cleanup()
+    os._exit(0)
 
 # Register signal handlers for graceful shutdown
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)
+if system() != 'Windows':
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+else:
+    signal.signal(signal.SIGBREAK, signal_handler)
+    
 
 if __name__ == '__main__':
     try:
@@ -561,4 +613,4 @@ if __name__ == '__main__':
         logging.error(f"Server error: {e}")
         print(f"{Colors.RED}Server error: {e}{Colors.END}")
     finally:
-        server.cleanup() 
+        server.cleanup()

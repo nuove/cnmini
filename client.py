@@ -1,6 +1,5 @@
 import socket
 import threading
-import json
 import argparse
 from typing import Optional
 from datetime import datetime
@@ -8,7 +7,7 @@ from constants import (
     HOST, PORT, BUFFER_SIZE, Colors,
     CMD_JOIN, CMD_EXIT, CMD_KICK, CMD_BAN,
     CMD_MAKEADMIN, CMD_REMOVEADMIN, CMD_LISTADMINS,
-    CMD_HELP
+    CMD_HELP, CMD_LISTUSERS
 )
 from message import Message, MessageValidator
 
@@ -54,6 +53,7 @@ class ChatClient:
             print(f"  {CMD_JOIN} <channel> - Join a channel")
             print(f"  {CMD_EXIT} - Exit the chat")
             print(f"  {CMD_HELP} - Show all commands")
+            print(f"  {CMD_LISTUSERS} - List all users")
             
             if self.username == "admin" or self.is_admin:
                 print(f"  {CMD_KICK} - Kick <username> from channel")
@@ -88,6 +88,12 @@ class ChatClient:
                             from_user=self.username,
                             to_channel=self.current_channel,
                             body=CMD_HELP
+                        ))
+                    elif message.lower() == CMD_LISTUSERS:
+                        self.send_message(Message(
+                            from_user=self.username,
+                            to_channel=self.current_channel,
+                            body=CMD_LISTUSERS
                         ))
                     else:
                         self.send_message(Message(

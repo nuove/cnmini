@@ -444,3 +444,296 @@
 2025-04-08 12:14:45,706 - INFO - [MainThread] - Cleaning up server resources...
 2025-04-08 12:14:45,707 - ERROR - [Thread-1 (handle_client)] - Error handling message from admin: [WinError 10038] An operation was attempted on something that is not a socket
 2025-04-08 12:14:45,708 - INFO - [MainThread] - Server cleanup completed
+2025-04-08 13:08:26,591 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-08 13:08:26,592 - INFO - [MainThread] - Server started on 10.1.0.32:1738
+2025-04-08 13:08:28,857 - INFO - [MainThread] - New connection from ('10.1.0.32', 11037)
+2025-04-08 13:08:31,052 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.0.32', 11037)
+2025-04-08 13:08:31,052 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-08 13:08:33,763 - INFO - [Thread-1 (handle_client)] - Command from admin: /help
+2025-04-08 13:08:33,764 - INFO - [Thread-1 (handle_client)] - User admin requested help
+2025-04-08 13:12:29,343 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-08 13:12:33,773 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 11:29:48,396 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 11:29:48,397 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 11:29:58,474 - INFO - [MainThread] - New connection from ('10.1.4.35', 6364)
+2025-04-09 11:30:00,600 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.4.35', 6364)
+2025-04-09 11:30:00,600 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-09 11:30:06,447 - INFO - [Thread-1 (handle_client)] - Command from admin: /listusers
+2025-04-09 11:30:16,515 - INFO - [Thread-1 (handle_client)] - Message from admin in general: test
+2025-04-09 11:30:23,771 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-09 11:30:25,898 - INFO - [MainThread] - New connection from ('10.1.4.35', 6457)
+2025-04-09 11:44:38,755 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 11:44:38,755 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 11:44:40,882 - INFO - [MainThread] - New connection from ('10.1.4.35', 1251)
+2025-04-09 11:44:43,072 - INFO - [Thread-1 (handle_client)] - User agni connected successfully from ('10.1.4.35', 1251)
+2025-04-09 11:44:47,178 - INFO - [Thread-1 (handle_client)] - Command from agni: /listusers
+2025-04-09 11:44:47,179 - ERROR - [Thread-1 (handle_client)] - Error handling message from agni: 'ChatServer' object has no attribute 'uesrs'
+2025-04-09 11:46:24,535 - INFO - [MainThread] - New connection from ('10.1.4.35', 1259)
+2025-04-09 11:46:32,577 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 11:46:49,841 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 11:46:49,841 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 11:46:51,470 - INFO - [MainThread] - New connection from ('10.1.4.35', 1268)
+2025-04-09 11:46:53,507 - INFO - [Thread-1 (handle_client)] - User agni connected successfully from ('10.1.4.35', 1268)
+2025-04-09 11:46:59,230 - INFO - [Thread-1 (handle_client)] - Command from agni: /listusers
+2025-04-09 11:46:59,230 - INFO - [Thread-1 (handle_client)] - Uesr list requested by agni
+2025-04-09 11:49:28,517 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 11:49:28,531 - ERROR - [Thread-1 (handle_client)] - Error handling message from agni: [WinError 10038] An operation was attempted on something that is not a socket
+2025-04-09 11:49:28,531 - INFO - [MainThread] - Server cleanup completed
+2025-04-09 11:49:36,947 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 11:49:36,947 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 11:49:40,209 - INFO - [MainThread] - New connection from ('10.1.4.35', 1299)
+2025-04-09 11:49:42,096 - INFO - [Thread-1 (handle_client)] - User admin connected successfully from ('10.1.4.35', 1299)
+2025-04-09 11:49:42,096 - INFO - [Thread-1 (handle_client)] - Admin user admin connected
+2025-04-09 11:49:46,318 - INFO - [Thread-1 (handle_client)] - Command from admin: /listadmins
+2025-04-09 11:49:46,319 - INFO - [Thread-1 (handle_client)] - Admin list requested by admin
+2025-04-09 11:49:49,907 - INFO - [Thread-1 (handle_client)] - User admin disconnected
+2025-04-09 11:49:59,552 - INFO - [MainThread] - New connection from ('10.1.4.35', 1301)
+2025-04-09 11:50:04,641 - INFO - [MainThread] - New connection from ('10.1.4.35', 1302)
+2025-04-09 11:50:18,751 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 11:50:25,202 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 11:50:25,203 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 11:50:28,504 - INFO - [MainThread] - New connection from ('10.1.4.35', 1305)
+2025-04-09 11:50:31,974 - INFO - [MainThread] - New connection from ('10.1.4.35', 1306)
+2025-04-09 11:50:33,513 - INFO - [Thread-2 (handle_client)] - User admin connected successfully from ('10.1.4.35', 1306)
+2025-04-09 11:50:33,514 - INFO - [Thread-2 (handle_client)] - Admin user admin connected
+2025-04-09 11:50:36,687 - INFO - [Thread-1 (handle_client)] - User test connected successfully from ('10.1.4.35', 1305)
+2025-04-09 11:50:40,589 - INFO - [Thread-2 (handle_client)] - Command from admin: /makeadmin test
+2025-04-09 11:50:48,140 - INFO - [Thread-1 (handle_client)] - Command from test: /listadmins
+2025-04-09 11:50:48,140 - INFO - [Thread-1 (handle_client)] - Admin list requested by test
+2025-04-09 11:50:55,145 - INFO - [Thread-2 (handle_client)] - Command from admin: /listadmins
+2025-04-09 11:50:55,145 - INFO - [Thread-2 (handle_client)] - Admin list requested by admin
+2025-04-09 11:56:53,323 - INFO - [Thread-1 (handle_client)] - User test disconnected
+2025-04-09 11:56:55,699 - INFO - [Thread-2 (handle_client)] - User admin disconnected
+2025-04-09 11:56:59,560 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 12:02:15,727 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 12:02:15,789 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 12:02:16,226 - INFO - [MainThread] - New connection from ('10.1.4.35', 2806)
+2025-04-09 12:02:16,758 - INFO - [MainThread] - New connection from ('10.1.4.35', 2807)
+2025-04-09 12:02:18,055 - INFO - [Thread-2 (handle_client)] - User admin connected successfully from ('10.1.4.35', 2807)
+2025-04-09 12:02:18,055 - INFO - [Thread-2 (handle_client)] - Admin user admin connected
+2025-04-09 12:02:19,752 - INFO - [Thread-1 (handle_client)] - User user connected successfully from ('10.1.4.35', 2806)
+2025-04-09 12:02:19,752 - INFO - [Thread-1 (handle_client)] - User user connected
+2025-04-09 12:02:23,106 - INFO - [Thread-1 (handle_client)] - Command from user: /listusers
+2025-04-09 12:02:23,106 - INFO - [Thread-1 (handle_client)] - User list requested by user
+2025-04-09 12:02:27,770 - INFO - [Thread-2 (handle_client)] - Command from admin: /listadmins
+2025-04-09 12:02:27,770 - INFO - [Thread-2 (handle_client)] - Admin list requested by admin
+2025-04-09 12:02:31,617 - INFO - [Thread-2 (handle_client)] - Message from admin in general: test
+2025-04-09 12:02:33,342 - INFO - [Thread-1 (handle_client)] - Message from user in general: test
+2025-04-09 12:02:41,048 - INFO - [Thread-2 (handle_client)] - Command from admin: /makeadmin user
+2025-04-09 12:02:46,918 - INFO - [Thread-2 (handle_client)] - Command from admin: /listadmins
+2025-04-09 12:02:46,918 - INFO - [Thread-2 (handle_client)] - Admin list requested by admin
+2025-04-09 12:02:51,514 - INFO - [Thread-1 (handle_client)] - Command from user: /listadmins
+2025-04-09 12:02:51,515 - INFO - [Thread-1 (handle_client)] - Admin list requested by user
+2025-04-09 12:02:54,260 - INFO - [Thread-1 (handle_client)] - Command from user: /listusers
+2025-04-09 12:02:54,261 - INFO - [Thread-1 (handle_client)] - User list requested by user
+2025-04-09 12:02:56,935 - INFO - [Thread-1 (handle_client)] - Command from user: /help
+2025-04-09 12:03:04,896 - INFO - [Thread-1 (handle_client)] - Command from user: /removeadmin admin
+2025-04-09 12:03:10,238 - INFO - [Thread-2 (handle_client)] - Command from admin: /listusers
+2025-04-09 12:03:10,239 - INFO - [Thread-2 (handle_client)] - User list requested by admin
+2025-04-09 12:03:17,931 - INFO - [Thread-2 (handle_client)] - Command from admin: /kick user
+2025-04-09 12:03:28,437 - INFO - [Thread-2 (handle_client)] - Command from admin: /exit
+2025-04-09 12:03:34,601 - INFO - [Thread-1 (handle_client)] - Command from user: /exit
+2025-04-09 12:05:37,853 - INFO - [MainThread] - New connection from ('10.1.4.35', 3542)
+2025-04-09 12:05:45,917 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 12:05:47,855 - ERROR - [Thread-3 (handle_client)] - Error getting username: timed out
+2025-04-09 12:05:47,856 - WARNING - [Thread-3 (handle_client)] - Failed to get valid username from ('10.1.4.35', 3542)
+2025-04-09 12:06:05,446 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 12:06:05,500 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 12:06:08,417 - INFO - [MainThread] - New connection from ('10.1.4.35', 4032)
+2025-04-09 12:06:10,174 - INFO - [MainThread] - New connection from ('10.1.4.35', 4038)
+2025-04-09 12:06:11,562 - INFO - [Thread-2 (handle_client)] - User admin connected successfully from ('10.1.4.35', 4038)
+2025-04-09 12:06:11,562 - INFO - [Thread-2 (handle_client)] - Admin user admin connected
+2025-04-09 12:06:11,562 - ERROR - [Thread-2 (handle_client)] - Error in client handler for admin: 'set' object has no attribute 'append'
+2025-04-09 12:06:27,314 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 12:14:58,847 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 12:14:58,888 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 12:15:02,034 - ERROR - [MainThread] - Server error: cannot pickle '_thread.lock' object
+2025-04-09 12:15:27,402 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-09 12:15:27,438 - INFO - [MainThread] - Server started on 10.1.4.35:1738
+2025-04-09 12:15:28,440 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-09 12:15:28,440 - INFO - [MainThread] - Server cleanup completed
+2025-04-16 15:17:54,588 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-16 15:17:54,658 - INFO - [MainThread] - Server started on 10.1.1.233:1738
+2025-04-16 15:19:00,728 - INFO - [MainThread] - New connection from ('10.1.1.233', 50003)
+2025-04-16 15:19:10,722 - ERROR - [Thread-1 (handle_client)] - Error getting username: timed out
+2025-04-16 15:19:10,724 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.1.1.233', 50003)
+2025-04-16 15:21:55,961 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-16 15:21:55,962 - INFO - [MainThread] - Server cleanup completed
+2025-04-16 15:21:59,201 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-16 15:21:59,271 - INFO - [MainThread] - Server started on 10.1.1.233:1738
+2025-04-16 15:22:08,758 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-16 15:22:08,817 - INFO - [MainThread] - Server started on 10.1.1.233:1738
+2025-04-16 15:22:10,825 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-16 15:22:10,826 - INFO - [MainThread] - Server cleanup completed
+2025-04-16 15:22:19,358 - INFO - [MainThread] - New connection from ('10.1.1.233', 50022)
+2025-04-16 15:22:29,355 - ERROR - [Thread-1 (handle_client)] - Error getting username: timed out
+2025-04-16 15:22:29,356 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.1.1.233', 50022)
+2025-04-16 15:23:02,433 - INFO - [MainThread] - New connection from ('10.1.1.233', 50028)
+2025-04-16 15:23:12,428 - ERROR - [Thread-2 (handle_client)] - Error getting username: timed out
+2025-04-16 15:23:12,429 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('10.1.1.233', 50028)
+2025-04-16 15:24:30,045 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-16 15:24:30,045 - INFO - [MainThread] - Server cleanup completed
+2025-04-16 15:28:37,311 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-16 15:28:37,453 - INFO - [MainThread] - Server started on 10.1.1.233:1738
+2025-04-16 15:28:41,151 - INFO - [MainThread] - New connection from ('10.1.1.233', 50058)
+2025-04-16 15:28:41,158 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.1.1.233', 50058)
+2025-04-16 15:33:01,438 - INFO - [MainThread] - New connection from ('10.1.1.233', 50125)
+2025-04-16 15:33:01,444 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('10.1.1.233', 50125)
+2025-04-16 15:33:30,163 - INFO - [MainThread] - New connection from ('10.1.1.233', 50128)
+2025-04-16 15:33:30,185 - WARNING - [Thread-3 (handle_client)] - Failed to get valid username from ('10.1.1.233', 50128)
+2025-04-17 16:55:48,504 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-17 16:55:48,599 - INFO - [MainThread] - Server started on 10.1.7.174:1738
+2025-04-17 16:56:01,611 - INFO - [MainThread] - New connection from ('10.1.7.174', 50417)
+2025-04-17 16:56:11,617 - ERROR - [Thread-1 (handle_client)] - Error getting username: timed out
+2025-04-17 16:56:11,618 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50417)
+2025-04-17 16:56:14,694 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-17 16:56:14,711 - INFO - [MainThread] - Server cleanup completed
+2025-04-17 16:57:54,100 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-17 16:57:54,185 - INFO - [MainThread] - Server started on 10.1.7.174:1738
+2025-04-17 16:58:00,807 - INFO - [MainThread] - New connection from ('10.1.7.174', 50441)
+2025-04-17 16:58:10,817 - ERROR - [Thread-1 (handle_client)] - Error getting username: timed out
+2025-04-17 16:58:10,817 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50441)
+2025-04-17 16:59:14,769 - INFO - [MainThread] - New connection from ('10.1.7.174', 50448)
+2025-04-17 16:59:19,730 - ERROR - [Thread-2 (handle_client)] - Error getting username: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-04-17 16:59:19,731 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50448)
+2025-04-17 17:01:20,529 - INFO - [MainThread] - New connection from ('10.1.7.174', 50471)
+2025-04-17 17:01:20,618 - WARNING - [Thread-3 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50471)
+2025-04-17 17:08:58,132 - INFO - [MainThread] - New connection from ('10.1.7.174', 50569)
+2025-04-17 17:08:58,213 - WARNING - [Thread-4 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50569)
+2025-04-17 17:09:49,262 - INFO - [MainThread] - New connection from ('10.1.7.174', 50573)
+2025-04-17 17:09:59,273 - ERROR - [Thread-5 (handle_client)] - Error getting username: timed out
+2025-04-17 17:09:59,274 - WARNING - [Thread-5 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50573)
+2025-04-17 17:14:17,236 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-17 17:14:17,237 - INFO - [MainThread] - Server cleanup completed
+2025-04-17 17:14:19,542 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-17 17:14:19,676 - INFO - [MainThread] - Server started on 10.1.7.174:1738
+2025-04-17 17:14:32,983 - INFO - [MainThread] - New connection from ('10.1.7.174', 50614)
+2025-04-17 17:14:42,996 - ERROR - [Thread-1 (handle_client)] - Error getting username: timed out
+2025-04-17 17:14:42,996 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50614)
+2025-04-17 17:17:36,498 - INFO - [MainThread] - New connection from ('10.1.7.174', 50641)
+2025-04-17 17:17:46,515 - ERROR - [Thread-2 (handle_client)] - Error getting username: timed out
+2025-04-17 17:17:46,516 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50641)
+2025-04-17 17:20:02,245 - INFO - [MainThread] - New connection from ('10.1.7.174', 50673)
+2025-04-17 17:20:02,246 - WARNING - [Thread-3 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50673)
+2025-04-17 17:26:23,262 - INFO - [MainThread] - New connection from ('10.1.7.174', 50712)
+2025-04-17 17:26:23,263 - WARNING - [Thread-4 (handle_client)] - Failed to get valid username from ('10.1.7.174', 50712)
+2025-04-17 17:29:08,730 - INFO - [MainThread] - New connection from ('10.1.7.174', 50769)
+2025-04-17 17:29:10,183 - INFO - [Thread-5 (handle_client)] - User agnivesh connected successfully from ('10.1.7.174', 50769)
+2025-04-17 17:29:10,184 - INFO - [Thread-5 (handle_client)] - Command from agnivesh: /join general
+2025-04-17 17:29:17,395 - INFO - [Thread-5 (handle_client)] - Message from agnivesh in general: test
+2025-04-17 17:29:19,375 - WARNING - [Thread-5 (handle_client)] - Connection reset by agnivesh
+2025-04-17 17:29:43,445 - INFO - [MainThread] - New connection from ('10.1.7.174', 50773)
+2025-04-17 17:30:14,641 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-17 17:32:38,689 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-17 17:32:38,825 - INFO - [MainThread] - Server started on 10.1.7.174:1738
+2025-04-17 17:32:44,665 - INFO - [MainThread] - New connection from ('10.1.7.174', 50788)
+2025-04-17 17:32:46,663 - INFO - [Thread-1 (handle_client)] - User agniv connected successfully from ('10.1.7.174', 50788)
+2025-04-17 17:32:46,664 - INFO - [Thread-1 (handle_client)] - Command from agniv: /join general
+2025-04-17 17:32:53,838 - INFO - [Thread-1 (handle_client)] - Message from agniv in general: Hello!
+2025-04-17 17:34:49,453 - INFO - [Thread-1 (handle_client)] - Message from agniv in general: hi
+2025-04-17 17:34:53,913 - INFO - [Thread-1 (handle_client)] - Command from agniv: /exit
+2025-04-17 17:35:43,996 - INFO - [MainThread] - New connection from ('10.1.7.174', 50810)
+2025-04-17 17:39:15,590 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-17 23:00:49,666 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-17 23:00:49,743 - INFO - [MainThread] - Server started on 10.14.143.179:1738
+2025-04-17 23:01:05,796 - INFO - [MainThread] - New connection from ('10.14.143.179', 49917)
+2025-04-17 23:01:09,003 - INFO - [Thread-1 (handle_client)] - User agnivesh connected successfully from ('10.14.143.179', 49917)
+2025-04-17 23:01:09,006 - INFO - [Thread-1 (handle_client)] - Command from agnivesh: /join general
+2025-04-17 23:01:13,243 - INFO - [Thread-1 (handle_client)] - Message from agnivesh in general: Hello!
+2025-04-17 23:01:18,796 - INFO - [Thread-1 (handle_client)] - Message from agnivesh in general: This is awesomesauce!
+2025-04-17 23:01:23,474 - WARNING - [Thread-1 (handle_client)] - Connection reset by agnivesh
+2025-04-17 23:02:45,601 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-17 23:03:17,165 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-17 23:03:17,245 - INFO - [MainThread] - Server started on 10.14.143.179:1738
+2025-04-17 23:03:30,882 - INFO - [MainThread] - New connection from ('10.14.143.179', 49946)
+2025-04-17 23:03:32,091 - INFO - [Thread-1 (handle_client)] - User agni1 connected successfully from ('10.14.143.179', 49946)
+2025-04-17 23:03:32,092 - INFO - [Thread-1 (handle_client)] - Command from agni1: /join general
+2025-04-17 23:03:38,764 - INFO - [MainThread] - New connection from ('10.14.143.179', 49949)
+2025-04-17 23:03:48,777 - ERROR - [Thread-2 (handle_client)] - Error getting username: timed out
+2025-04-17 23:03:48,777 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('10.14.143.179', 49949)
+2025-04-18 02:14:05,521 - WARNING - [Thread-1 (handle_client)] - Connection reset by agni1
+2025-04-18 17:32:08,639 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-19 14:08:54,255 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-19 14:08:54,311 - INFO - [MainThread] - Server started on 10.14.142.229:1738
+2025-04-19 14:09:10,937 - INFO - [MainThread] - New connection from ('10.14.142.229', 52760)
+2025-04-19 14:09:13,180 - INFO - [Thread-1 (handle_client)] - User agniv1 connected successfully from ('10.14.142.229', 52760)
+2025-04-19 14:09:13,181 - INFO - [Thread-1 (handle_client)] - Command from agniv1: /join general
+2025-04-19 14:09:15,431 - INFO - [MainThread] - New connection from ('10.14.142.229', 52761)
+2025-04-19 14:09:16,998 - INFO - [Thread-2 (handle_client)] - User agniv2 connected successfully from ('10.14.142.229', 52761)
+2025-04-19 14:09:16,999 - INFO - [Thread-2 (handle_client)] - Command from agniv2: /join general
+2025-04-19 14:09:22,099 - INFO - [Thread-2 (handle_client)] - Message from agniv2 in general: Hello!
+2025-04-19 14:09:25,370 - INFO - [Thread-1 (handle_client)] - Message from agniv1 in general: Yo
+2025-04-19 14:09:45,350 - INFO - [Thread-1 (handle_client)] - Message from agniv1 in general: TS doesn't work
+2025-04-19 14:09:48,088 - INFO - [Thread-2 (handle_client)] - Message from agniv2 in general: Yeah
+2025-04-19 14:09:57,279 - WARNING - [Thread-2 (handle_client)] - Connection reset by agniv2
+2025-04-19 14:09:58,479 - WARNING - [Thread-1 (handle_client)] - Connection reset by agniv1
+2025-04-19 14:10:00,738 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-20 11:30:46,017 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-20 11:30:46,095 - INFO - [MainThread] - Server started on 10.14.142.209:1738
+2025-04-20 11:30:54,223 - INFO - [MainThread] - New connection from ('10.14.142.209', 51414)
+2025-04-20 11:30:55,759 - WARNING - [Thread-1 (handle_client)] - Failed to get valid username from ('10.14.142.209', 51414)
+2025-04-20 11:31:00,437 - INFO - [MainThread] - New connection from ('10.14.142.209', 51415)
+2025-04-20 11:31:02,052 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('10.14.142.209', 51415)
+2025-04-20 11:32:05,837 - INFO - [MainThread] - New connection from ('10.14.142.209', 51434)
+2025-04-20 11:32:07,557 - WARNING - [Thread-3 (handle_client)] - Failed to get valid username from ('10.14.142.209', 51434)
+2025-04-20 11:37:08,002 - INFO - [MainThread] - New connection from ('10.14.142.209', 51473)
+2025-04-20 11:37:09,713 - INFO - [Thread-4 (handle_client)] - User agniv1 connected successfully from ('10.14.142.209', 51473)
+2025-04-20 11:37:09,713 - INFO - [Thread-4 (handle_client)] - Command from agniv1: /join general
+2025-04-20 11:37:18,696 - INFO - [Thread-4 (handle_client)] - Message from agniv1 in general: hello
+2025-04-20 11:37:30,881 - INFO - [MainThread] - New connection from ('10.14.142.209', 51479)
+2025-04-20 11:37:32,320 - INFO - [Thread-5 (handle_client)] - User agniv2 connected successfully from ('10.14.142.209', 51479)
+2025-04-20 11:37:32,320 - INFO - [Thread-5 (handle_client)] - Command from agniv2: /join general
+2025-04-20 11:37:39,881 - INFO - [Thread-5 (handle_client)] - Message from agniv2 in general: hi
+2025-04-20 11:37:43,689 - WARNING - [Thread-4 (handle_client)] - Connection reset by agniv1
+2025-04-20 11:37:44,639 - WARNING - [Thread-5 (handle_client)] - Connection reset by agniv2
+2025-04-20 11:42:37,826 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-20 11:42:37,900 - INFO - [MainThread] - Server started on 10.14.142.209:1738
+2025-04-20 11:42:43,336 - INFO - [MainThread] - New connection from ('10.14.142.209', 51567)
+2025-04-20 11:42:44,940 - INFO - [Thread-1 (handle_client)] - User agniv1 connected successfully from ('10.14.142.209', 51567)
+2025-04-20 11:42:44,941 - INFO - [Thread-1 (handle_client)] - Command from agniv1: /join general
+2025-04-20 11:42:49,693 - INFO - [MainThread] - New connection from ('10.14.142.209', 51570)
+2025-04-20 11:42:51,004 - INFO - [Thread-2 (handle_client)] - User agniv2 connected successfully from ('10.14.142.209', 51570)
+2025-04-20 11:42:51,005 - INFO - [Thread-2 (handle_client)] - Command from agniv2: /join general
+2025-04-20 11:42:54,444 - INFO - [Thread-2 (handle_client)] - Message from agniv2 in general: hello
+2025-04-20 11:42:59,561 - INFO - [Thread-1 (handle_client)] - Message from agniv1 in general: hello
+2025-04-20 11:43:02,482 - WARNING - [Thread-2 (handle_client)] - Connection reset by agniv2
+2025-04-20 11:43:03,123 - WARNING - [Thread-1 (handle_client)] - Connection reset by agniv1
+2025-04-20 11:49:07,557 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-20 11:49:07,634 - INFO - [MainThread] - Server started on 10.14.142.209:1738
+2025-04-20 11:49:11,863 - INFO - [MainThread] - New connection from ('10.14.142.209', 51636)
+2025-04-20 11:49:13,474 - INFO - [Thread-2 (handle_client)] - User agniv1 connected successfully from ('10.14.142.209', 51636)
+2025-04-20 11:49:13,474 - INFO - [Thread-2 (handle_client)] - Command from agniv1: /join general
+2025-04-20 11:49:17,195 - INFO - [MainThread] - New connection from ('10.14.142.209', 51638)
+2025-04-20 11:49:18,857 - INFO - [Thread-3 (handle_client)] - User agniv2 connected successfully from ('10.14.142.209', 51638)
+2025-04-20 11:49:18,857 - INFO - [Thread-3 (handle_client)] - Command from agniv2: /join general
+2025-04-20 11:49:23,432 - INFO - [Thread-2 (handle_client)] - Message from agniv1 in general: test
+2025-04-20 11:49:27,118 - INFO - [Thread-3 (handle_client)] - Message from agniv2 in general: what
+2025-04-20 11:49:33,015 - INFO - [Thread-2 (handle_client)] - Message from agniv1 in general: BRO
+2025-04-20 11:50:16,104 - WARNING - [Thread-2 (handle_client)] - Connection reset by agniv1
+2025-04-20 11:50:17,416 - WARNING - [Thread-3 (handle_client)] - Connection reset by agniv2
+2025-04-20 11:50:18,647 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-20 11:57:03,957 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-20 11:57:04,040 - INFO - [MainThread] - Server started on 10.14.142.209:1738
+2025-04-20 11:57:07,605 - INFO - [MainThread] - New connection from ('10.14.142.209', 51786)
+2025-04-20 11:57:08,661 - INFO - [Thread-2 (handle_client)] - User agniv connected successfully from ('10.14.142.209', 51786)
+2025-04-20 11:57:08,661 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join general
+2025-04-20 11:57:10,644 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #general
+2025-04-20 11:57:16,405 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #test
+2025-04-20 11:57:17,926 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #general
+2025-04-20 11:57:18,718 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #test
+2025-04-20 11:57:19,253 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #general
+2025-04-20 11:57:19,923 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #test
+2025-04-20 11:57:21,968 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #general
+2025-04-20 11:57:22,427 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #test
+2025-04-20 11:57:25,884 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #what
+2025-04-20 11:57:28,681 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #wha
+2025-04-20 11:57:33,632 - INFO - [Thread-2 (handle_client)] - Command from agniv: /join #test
+2025-04-20 11:57:36,376 - WARNING - [Thread-2 (handle_client)] - Connection reset by agniv
+2025-04-20 12:04:23,853 - INFO - [MainThread] - New connection from ('10.14.142.209', 51976)
+2025-04-20 12:07:00,270 - INFO - [MainThread] - New connection from ('10.14.142.209', 52015)
+2025-04-20 12:07:55,962 - INFO - [MainThread] - New connection from ('10.14.142.209', 52026)
+2025-04-20 12:08:27,248 - INFO - [MainThread] - New connection from ('10.14.142.209', 52031)
+2025-04-20 12:09:02,289 - INFO - [MainThread] - New connection from ('10.14.142.209', 52060)
+2025-04-20 12:09:18,075 - INFO - [MainThread] - New connection from ('10.14.142.209', 52068)
+2025-04-20 12:10:41,569 - INFO - [MainThread] - New connection from ('10.14.142.209', 52098)
+2025-04-20 12:15:45,681 - INFO - [MainThread] - New connection from ('10.14.142.209', 52153)

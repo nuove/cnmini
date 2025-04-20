@@ -1,27 +1,44 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                             QTextEdit, QLineEdit, QLabel, QScrollArea, QListWidget, QListWidgetItem,
-                             QPushButton, QInputDialog, QDialog, QRadioButton)
-from PyQt5.QtCore import Qt
+import threading
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QTextEdit, QLineEdit, QLabel, QScrollArea, QListWidget, QListWidgetItem,
+    QPushButton, QInputDialog, QMenuBar, QAction
+    )
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QColor, QTextCharFormat, QIcon
 
+from client import ChatClient
+from message import Message, MessageValidator
+
 class IRCClient(QMainWindow):
-    def __init__(self):
+    def __init__(self, server_ip):
         super().__init__()
-        self.user_colors = {}  # Dictionary to store username-to-color mapping
+        self.server_ip = server_ip
+        self.client = None
+        self.username = None
+        self.running = False
+
+        # Initialize user state BEFORE UI
+        self.user_colors = {}
         self.available_colors = [
             "#ff7b7b", "#58a6ff", "#faa356", "#bd93f9", "#43b581", "#f04747", "#7289da"
-        ]  # Predefined list of colors
-
-        # Add a default admin user
+        ]
         default_admin = "Admin"
-        self.user_colors[default_admin] = "#ff0000"  # Red for admin
-        self.current_user = default_admin  # Start as the default admin
+        self.user_colors[default_admin] = "#ff0000"
+        self.current_user = default_admin
 
-        # Set up the UI
         self.setWindowTitle("ChudChat")
         self.setGeometry(100, 100, 1000, 700)
         self.setWindowIcon(QIcon("./chud.png"))  # Set your icon path here
+
+        # Add menu bar with Settings
+        menu_bar = QMenuBar(self)
+        settings_menu = menu_bar.addMenu("Settings")
+        change_ip_action = QAction("Change Server IP", self)
+        change_ip_action.triggered.connect(self.change_server_ip)
+        settings_menu.addAction(change_ip_action)
+        self.setMenuBar(menu_bar)
 
         # Main layout
         main_widget = QWidget()
@@ -80,33 +97,19 @@ class IRCClient(QMainWindow):
         header_layout.addStretch()
         left_layout.addWidget(header_container)
 
-        self.channel_list = QListWidget()
-        self.channel_list.setStyleSheet("""
-            QListWidget {
-                background-color: transparent;
-                color: #dcddde;
-                border: none;
-                font-size: 14px;
-                padding: 2px 0;
-                margin-left: 8px; 
-                margin-right: 8px;
-            }
-            QListWidget::item {
-                padding: 8px 16px;
-            }
-            QListWidget::item:hover {
-                background-color: #3a3d44;
-            }
-            QListWidget::item:selected {
-                background-color: #4f545c;
-            }
-        """)
-        left_layout.addWidget(self.channel_list, stretch=1)
+        # Add a widget and layout to hold channel buttons
+        self.channel_buttons_widget = QWidget()
+        self.channel_buttons_layout = QVBoxLayout(self.channel_buttons_widget)
+        self.channel_buttons_layout.setContentsMargins(4, 4, 4, 4)  # Reduced margins
+        self.channel_buttons_layout.setSpacing(0)  # No extra spacing between buttons
+        self.channel_buttons_layout.setAlignment(Qt.AlignTop)  # <-- Add this line
+        left_layout.addWidget(self.channel_buttons_widget, stretch=1)
 
-        # Add sample channels
-        self.channel_list.addItems(["#general"])
-        self.channel_list.setCurrentRow(0)
+        # Store channel buttons for easy access
+        self.channel_buttons = {}
 
+        # Add default #general channel button
+        self.add_channel_button("#general")
         main_layout.addWidget(left_sidebar)
 
         # Chat area
@@ -116,7 +119,7 @@ class IRCClient(QMainWindow):
         chat_layout.setSpacing(0)
 
         # Channel header
-        self.channel_header = QLabel("General")
+        self.channel_header = QLabel("#general")
         self.channel_header.setStyleSheet("""
             QLabel {
                 background-color: #36393f;
@@ -255,64 +258,134 @@ class IRCClient(QMainWindow):
         """)
 
         self.adjust_admin_list_height()  # Adjust height after adding the item
-
-        # Add user button
-        add_user_btn = QPushButton("Add User")
-        add_user_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #2f3136;
-                color: #ffffff;
-                border: none;
-                border-radius: 8px;
-                padding: 8px;
-                font-weight: bold;
-                text-align: center;
-            }
-            QPushButton:hover {
-                background-color: #7289da;
-            }
-            QPushButton:pressed {
-                background-color: #4752c4;
-            }
-        """)
-        add_user_btn.clicked.connect(self.add_user_dialog)
-        right_layout.addWidget(add_user_btn)
-
-        # Add switch user button
-        switch_user_btn = QPushButton("Switch User")
-        switch_user_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #2f3136;
-                color: #ffffff;
-                border: none;
-                border-radius: 8px;
-                padding: 8px;
-                font-weight: bold;
-                text-align: center;
-            }
-            QPushButton:hover {
-                background-color: #7289da;
-            }
-            QPushButton:pressed {
-                background-color: #4752c4;
-            }
-        """)
-        switch_user_btn.clicked.connect(self.switch_user_dialog)
-        right_layout.addWidget(switch_user_btn)
-
         main_layout.addWidget(right_sidebar)
+
+        # Now call init_connection AFTER widgets are created
+        self.init_connection()
+
+    def init_connection(self):
+        # Connect to server
+        self.client = ChatClient(server_host=self.server_ip)
+        try:
+            self.client.socket.connect((self.server_ip, self.client.server_port))
+        except Exception as e:
+            QInputDialog.getText(self, "Connection Error", f"Failed to connect: {e}")
+            sys.exit(1)
+        
+        # Prompt for username with validation
+        while True:
+            username, ok = QInputDialog.getText(self, "Username", "Enter your username (3-20 chars, alphanumeric, -_):")
+            if not ok:
+                sys.exit(0)
+            if MessageValidator.validate_username(username):
+                self.username = username
+                # Add the user to the user list widget
+                self.add_user(username=username)
+                break            
+
+        # Send username to server
+        self.running = True
+        self.client.running = True
+        self.client.username = self.username
+        self.client.send_message(Message(
+            from_user=self.username,
+            to_channel='',
+            body=self.username
+        ))
+
+        # Automatically join "general" channel
+        self.client.current_channel = "general"
+        self.client.send_message(Message(
+            from_user=self.username,
+            to_channel="general",
+            body="/join general"
+        ))
+
+        # Start background thread to receive messages
+        self.receiver_thread = threading.Thread(target=self.receive_messages, daemon=True)
+        self.receiver_thread.start()
+
+    def receive_messages(self):
+        while self.running:
+            try:
+                data = self.client.socket.recv(4096)
+                if not data:
+                    break
+                message = Message.from_json(data.decode('utf-8'))
+                if message:
+                    if message.body.startswith('USERLIST:'):
+                        users = message.body[len('USERLIST:'):].split(',')
+                        QTimer.singleShot(0, lambda: self.update_user_list(users))
+                    else:
+                        QTimer.singleShot(0, lambda: self.add_message(message.from_user, message.body))
+            except Exception:
+                break
+
+    def update_user_list(self, users):
+        self.user_list.clear()
+        for username in users:
+            if username:
+                user_item = QListWidgetItem(username)
+                user_item.setToolTip("Role: User")
+                self.user_list.addItem(user_item)
+
+    def display_message(self, message):
+        # Ensure GUI update happens in the main thread
+        QTimer.singleShot(0, lambda: self.add_message(message.from_user, message.body))
+
+    def add_channel_button(self, channel_name):
+        """Add a channel as a button in the channel buttons layout."""
+        if channel_name in self.channel_buttons:
+            return
+        btn = QPushButton(channel_name)
+        btn.setCheckable(True)
+        btn.setStyleSheet("""
+            QPushButton {
+                background-color: #36393f;
+                color: #ff9955;
+                border: none;
+                border-radius: 8px;
+                padding: 6px 14px;
+                font-weight: bold;
+                text-align: left;
+            }
+            QPushButton:checked {
+                background-color: #5865f2;
+                color: #fff;
+            }
+        """)
+        btn.clicked.connect(lambda checked, name=channel_name: self.switch_channel(name))
+        self.channel_buttons_layout.addWidget(btn)
+        self.channel_buttons[channel_name] = btn
+        # Set #general as checked by default
+        if channel_name == "#general":
+            btn.setChecked(True)
 
     def add_channel(self):
         channel_name, ok = QInputDialog.getText(self, "Add Channel", "Enter channel name:")
         if ok and channel_name:
-            # Ensure channel name starts with '#' 
             if not channel_name.startswith("#"):
                 channel_name = "#" + channel_name
-            # Add the channel to the list if it doesn't exist already
-            existing_channels = [self.channel_list.item(i).text() for i in range(self.channel_list.count())]
-            if channel_name not in existing_channels:
-                self.channel_list.addItem(channel_name)
-            
+            if channel_name not in self.channel_buttons:
+                self.add_channel_button(channel_name)
+            # Switch to the new channel
+            self.switch_channel(channel_name)
+
+    def switch_channel(self, channel_name):
+        """Switch to the selected channel and update the header label."""
+        # Uncheck all buttons except the selected one
+        for name, btn in self.channel_buttons.items():
+            btn.setChecked(name == channel_name)
+        # Update the channel header label
+        self.channel_header.setText(channel_name)
+        # Switch channel in client if needed
+        if self.client.current_channel != channel_name:
+            self.client.current_channel = channel_name
+            self.client.send_message(Message(
+                from_user=self.username,
+                to_channel=channel_name,
+                body=f"/join {channel_name}"
+            ))
 
     def add_message(self, username, message, color=None):
         """Add a message to the chat area with color attributes."""
@@ -354,9 +427,15 @@ class IRCClient(QMainWindow):
         self.messages_layout.insertWidget(self.messages_layout.count() - 1, message_widget)
 
     def send_message(self):
-        message = self.message_input.text()
-        if message:
-            self.add_message(self.current_user, message, self.user_colors.get(self.current_user, "#ffffff"))
+        message_text = self.message_input.text()
+        if message_text:
+            msg = Message(
+                from_user=self.username,  # Always use the logged-in username
+                to_channel=self.client.current_channel,  # Always use the current channel
+                body=message_text
+            )
+            self.client.send_message(msg)  # This sends the message to the server in the correct format
+            self.add_message(self.username, message_text)
             self.message_input.clear()
 
     def adjust_admin_list_height(self):
@@ -366,120 +445,16 @@ class IRCClient(QMainWindow):
         total_height += 2 * self.admin_list.frameWidth()  # Add frame width
         self.admin_list.setFixedHeight(total_height)
 
-    def add_user_dialog(self):
-        """Open a dialog to add a user with a role."""
-        dialog = QDialog(self)
-        dialog.setWindowTitle("Add User")
-        dialog.setFixedSize(300, 200)
-
-        layout = QVBoxLayout(dialog)
-
-        # Username input
-        username_label = QLabel("Enter username:")
-        layout.addWidget(username_label)
-
-        username_input = QLineEdit()
-        layout.addWidget(username_input)
-
-        # Role selection
-        role_label = QLabel("Select role:")
-        layout.addWidget(role_label)
-
-        role_admin = QRadioButton("Admin")
-        role_user = QRadioButton("User")
-        role_user.setChecked(True)  # Default to "User"
-
-        role_layout = QHBoxLayout()
-        role_layout.addWidget(role_admin)
-        role_layout.addWidget(role_user)
-        layout.addLayout(role_layout)
-
-        # Buttons
-        button_layout = QHBoxLayout()
-        add_button = QPushButton("Add")
-        cancel_button = QPushButton("Cancel")
-        button_layout.addWidget(add_button)
-        button_layout.addWidget(cancel_button)
-        layout.addLayout(button_layout)
-
-        # Button actions
-        def add_user():
-            username = username_input.text().strip()
-            if username:
-                if role_admin.isChecked():
-                    # Assign red color to admins
-                    self.user_colors[username] = "#ff0000"  # Red
-                    admin_item = QListWidgetItem(username)
-                    admin_item.setToolTip("Role: Admin")
-                    self.admin_list.addItem(admin_item)
-                    self.adjust_admin_list_height()
-                elif role_user.isChecked():
-                    # Assign green color to users
-                    self.user_colors[username] = "#00ff00"  # Green
-                    user_item = QListWidgetItem(username)
-                    user_item.setToolTip("Role: User")
-                    self.user_list.addItem(user_item)
-                dialog.accept()
-
-        add_button.clicked.connect(add_user)
-        cancel_button.clicked.connect(dialog.reject)
-
-        dialog.exec_()
-
-    def switch_user_dialog(self):
-        """Open a dialog to switch the active user."""
-        dialog = QDialog(self)
-        dialog.setWindowTitle("Switch User")
-        dialog.setFixedSize(300, 200)
-
-        layout = QVBoxLayout(dialog)
-
-        # User selection label
-        user_label = QLabel("Select a user:")
-        layout.addWidget(user_label)
-
-        # User list
-        user_list_widget = QListWidget()
-        for i in range(self.user_list.count()):
-            user_list_widget.addItem(self.user_list.item(i).text())
-        for i in range(self.admin_list.count()):
-            user_list_widget.addItem(self.admin_list.item(i).text())
-        layout.addWidget(user_list_widget)
-
-        # Buttons
-        button_layout = QHBoxLayout()
-        switch_button = QPushButton("Switch")
-        cancel_button = QPushButton("Cancel")
-        button_layout.addWidget(switch_button)
-        button_layout.addWidget(cancel_button)
-        layout.addLayout(button_layout)
-
-        # Button actions
-        def switch_user():
-            selected_user = user_list_widget.currentItem()
-            if selected_user:
-                self.current_user = selected_user.text()
-                self.message_input.setPlaceholderText(f"Message as {self.current_user}")
-                self.message_input.setStyleSheet(f"""
-                    QLineEdit {{
-                        background-color: #484b52;
-                        color: {self.user_colors.get(self.current_user, "#ffffff")};
-                        border: 2px solid #484b52;
-                        border-radius: 8px;
-                        padding: 12px 16px;
-                        margin: 16px;
-                        font-size: 14px;
-                    }}
-                    QLineEdit:focus {{
-                        border: 2px solid #5865f2;
-                    }}
-                """)
-                dialog.accept()
-
-        switch_button.clicked.connect(switch_user)
-        cancel_button.clicked.connect(dialog.reject)
-
-        dialog.exec_()
+    def add_user(self, username=None):
+        """Add a user to the user list (default role: User, green color)."""
+        if username is None:
+            username, ok = QInputDialog.getText(self, "Add User", "Enter username:")
+            if not ok or not username:
+                return
+        self.user_colors[username] = "#00ff00"  # Green
+        user_item = QListWidgetItem(username)
+        user_item.setToolTip("Role: User")
+        self.user_list.addItem(user_item)
 
     def assign_colors_to_existing_users(self):
         """Assign red to admins and green to users."""
@@ -495,6 +470,15 @@ class IRCClient(QMainWindow):
             self.user_colors[username] = "#00ff00"  # Green
             self.user_list.item(i).setToolTip("Role: User")
 
+    def change_server_ip(self):
+        new_ip, ok = QInputDialog.getText(self, "Change Server IP", "Enter new server IP:")
+        if ok and new_ip:
+            self.server_ip = new_ip
+            # Here you should add logic to reconnect to the new server IP
+            # For now, just show a message or print
+            print(f"Changed server IP to: {self.server_ip}")
+
+# --- Startup dialog logic ---
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
@@ -507,6 +491,11 @@ if __name__ == "__main__":
     palette.setColor(palette.Text, Qt.white)
     app.setPalette(palette)
 
-    window = IRCClient()
+    # Startup dialog for server IP
+    server_ip, ok = QInputDialog.getText(None, "Server IP", "Enter the server IP address:")
+    if not ok or not server_ip:
+        sys.exit(0)
+
+    window = IRCClient(server_ip)
     window.show()
     sys.exit(app.exec_())
