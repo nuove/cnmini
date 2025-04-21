@@ -319,3 +319,20 @@
 2025-04-08 10:21:35,114 - WARNING - [Thread-5 (handle_client)] - Failed to get valid username from ('10.14.142.202', 51604)
 2025-04-08 10:21:35,114 - INFO - [Thread-2 (handle_client)] - User wef disconnected
 2025-04-08 10:21:39,746 - INFO - [MainThread] - Cleaning up server resources...
+2025-04-20 19:34:03,645 - INFO - [MainThread] - Server initialized with default admin: admin
+2025-04-20 19:34:03,645 - INFO - [MainThread] - Server started on 10.14.142.230:1738
+2025-04-20 19:34:14,893 - INFO - [MainThread] - New connection from ('127.0.0.1', 63315)
+2025-04-20 19:34:17,344 - INFO - [MainThread] - New connection from ('127.0.0.1', 63316)
+2025-04-20 19:34:21,978 - INFO - [Thread-1 (handle_client)] - User jites connected successfully from ('127.0.0.1', 63315)
+2025-04-20 19:34:27,346 - ERROR - [Thread-2 (handle_client)] - Error getting username: timed out
+2025-04-20 19:34:27,346 - WARNING - [Thread-2 (handle_client)] - Failed to get valid username from ('127.0.0.1', 63316)
+2025-04-20 19:34:30,506 - INFO - [Thread-1 (handle_client)] - Message from jites in general: jkadbvad
+2025-04-20 19:34:40,141 - INFO - [MainThread] - New connection from ('127.0.0.1', 63317)
+2025-04-20 19:34:42,418 - INFO - [Thread-3 (handle_client)] - User nigg connected successfully from ('127.0.0.1', 63317)
+2025-04-20 19:34:43,865 - INFO - [Thread-3 (handle_client)] - Message from nigg in general: gqg
+2025-04-20 19:34:44,707 - INFO - [Thread-3 (handle_client)] - Message from nigg in general: sg
+2025-04-20 19:34:45,400 - INFO - [Thread-3 (handle_client)] - Message from nigg in general: w
+2025-04-20 19:34:47,023 - INFO - [Thread-1 (handle_client)] - Message from jites in general: srgs
+2025-04-20 19:35:16,540 - INFO - [Thread-1 (handle_client)] - User jites disconnected
+2025-04-20 19:35:17,790 - INFO - [Thread-3 (handle_client)] - User nigg disconnected
+2025-04-20 19:35:22,044 - INFO - [MainThread] - Cleaning up server resources...

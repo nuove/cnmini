@@ -255,6 +255,9 @@ class ChatServer:
         elif command == CMD_HELP:
             self.handle_help(username, is_admin)
             logging.info(f"User {username} requested help")
+        elif command == CMD_LISTADMINS:
+            self.handle_list_admins(username)
+            logging.info(f"User {username} requested admin list")
         elif is_admin:
             if command == CMD_KICK:
                 self.handle_kick(username, argument)
@@ -559,4 +562,4 @@ if __name__ == '__main__':
         logging.error(f"Server error: {e}")
         print(f"{Colors.RED}Server error: {e}{Colors.END}")
     finally:
-        server.cleanup() 
+        server.cleanup()

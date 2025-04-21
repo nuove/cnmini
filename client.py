@@ -81,6 +81,12 @@ class ChatClient:
                             to_channel=self.current_channel,
                             body=CMD_HELP
                         ))
+                    elif message.lower() == CMD_LISTADMINS:
+                        self.send_message(Message(
+                            from_user=self.username,
+                            to_channel=self.current_channel,
+                            body=CMD_LISTADMINS
+                        ))
                     else:
                         self.send_message(Message(
                             from_user=self.username,
@@ -175,6 +181,9 @@ class ChatClient:
                 print(f"{Colors.YELLOW}[Admin] {username} was demoted from admin{Colors.END}")
             elif message.body == CMD_HELP or message.body.startswith('Available commands:'):
                 # Display help message
+                print(f"\n{Colors.CYAN}{message.body}{Colors.END}\n")
+            elif message.body.startswith('Current admins:'):
+                # Display the list of current admins
                 print(f"\n{Colors.CYAN}{message.body}{Colors.END}\n")
         else:
             # Regular chat messages - only show if they're in the current channel
